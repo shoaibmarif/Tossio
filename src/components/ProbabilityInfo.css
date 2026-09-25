@@ -1,0 +1,40 @@
+.probability-info {
+  background: var(--color-surface, #f8f9fa);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+.probability-info__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  color: var(--color-text, #1a1a2e);
+}
+
+.probability-info__text {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary, #4b5563);
+  margin: 0 0 0.75rem;
+}
+
+.probability-info__highlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: rgba(102, 126, 234, 0.08);
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #667eea;
+  font-size: 0.875rem;
+}
+
+.probability-info__note {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #9ca3af);
+  font-style: italic;
+  margin: 0.75rem 0 0;
+}
