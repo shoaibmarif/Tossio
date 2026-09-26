@@ -2,36 +2,54 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 
     <!-- Primary Meta Tags -->
-    <title>Coin Flip Online – Free Virtual Coin Flipper</title>
-    <meta name="description" content="Flip a coin online instantly. Get Heads or Tails with our free virtual coin flipper, complete with flip statistics and history." />
-    <meta name="keywords" content="coin flip, flip a coin, heads or tails, virtual coin, coin flipper, random coin flip, online coin toss" />
-    <link rel="canonical" href="https://yourusername.github.io/coin-flip/" />
+    <title>coinfliptool – Free Virtual Coin Flip & Probability Simulator</title>
+    <meta name="description" content="coinfliptool: Flip a coin online instantly with a realistic 3D animated coin. Powered by cryptographically secure random values (crypto.getRandomValues()), complete with batch experiments, streak tracking, and probability statistics." />
+    <meta name="keywords" content="coinfliptool, coin flip, flip a coin, heads or tails, virtual coin, coin flipper, random coin flip, online coin toss, probability simulator, coin flip streaks, batch coin flip" />
+    <meta name="author" content="Shoaib Arif (https://shoaibarif.vercel.app/)" />
+    <link rel="canonical" href="https://coin-flip-tool.netlify.app/" />
+
+    <!-- PWA Manifest & Icons -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta name="theme-color" content="#f59e0b" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://yourusername.github.io/coin-flip/" />
-    <meta property="og:title" content="Coin Flip Online – Free Virtual Coin Flipper" />
-    <meta property="og:description" content="Flip a coin online instantly. Get Heads or Tails with our free virtual coin flipper, complete with flip statistics and history." />
-    <meta property="og:site_name" content="Coin Flip Online" />
+    <meta property="og:url" content="https://coin-flip-tool.netlify.app/" />
+    <meta property="og:title" content="coinfliptool – Free Virtual Coin Flip & Probability Simulator" />
+    <meta property="og:description" content="Flip a coin online instantly with realistic 3D animation, cryptographically secure randomness, batch simulations, and streak records on coinfliptool." />
+    <meta property="og:site_name" content="coinfliptool" />
 
     <!-- Twitter / X -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Coin Flip Online – Free Virtual Coin Flipper" />
-    <meta name="twitter:description" content="Flip a coin online instantly. Get Heads or Tails with our free virtual coin flipper, complete with flip statistics and history." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="coinfliptool – Free Virtual Coin Flip & Probability Simulator" />
+    <meta name="twitter:description" content="Flip a coin online instantly with realistic 3D animation, cryptographically secure randomness, batch simulations, and streak records on coinfliptool." />
 
-    <!-- Structured Data -->
+    <!-- Initial Structured Data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "Coin Flip Online",
-        "description": "Flip a coin online instantly. Get Heads or Tails with our free virtual coin flipper, complete with flip statistics and history.",
-        "url": "https://yourusername.github.io/coin-flip/",
-        "applicationCategory": "UtilityApplication",
-        "operatingSystem": "Any",
+        "name": "coinfliptool",
+        "description": "Cryptographically secure virtual coin flip simulator & probability analysis engine.",
+        "url": "https://coin-flip-tool.netlify.app/",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "All",
+        "author": {
+          "@type": "Person",
+          "name": "Shoaib Arif",
+          "url": "https://shoaibarif.vercel.app/",
+          "sameAs": [
+            "https://github.com/shoaibmarif",
+            "https://www.linkedin.com/in/shoaibmarif/"
+          ]
+        },
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -39,16 +57,26 @@
         }
       }
     </script>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJV669NQYE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#1a1a2e" />
-
-    <!-- Favicon (inline SVG) -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪙</text></svg>" />
+  gtag('config', 'G-YJV669NQYE');
+</script>
   </head>
-  <body>
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-amber-200 dark:selection:bg-amber-900">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>
 

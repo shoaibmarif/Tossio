@@ -1,45 +1,22 @@
-/* ===== CSS Reset ===== */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* ===== Design Tokens ===== */
-:root {
-  --color-bg: #ffffff;
-  --color-surface: #f8f9fa;
-  --color-text: #1a1a2e;
-  --color-text-secondary: #4b5563;
-  --color-text-muted: #6b7280;
-  --color-border: #e5e7eb;
-  --color-primary: #667eea;
-  --color-primary-dark: #764ba2;
-
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-
-  --max-width: 640px;
-  --spacing-page: 1rem;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ===== Base Styles ===== */
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scrollbar-gutter: stable;
 }
 
 body {
-  font-family: var(--font-family);
-  background: var(--color-bg);
-  color: var(--color-text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 #root {
@@ -48,40 +25,34 @@ body {
   flex-direction: column;
 }
 
-/* ===== Focus Styles ===== */
-:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-:focus:not(:focus-visible) {
-  outline: none;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-/* ===== Reduced Motion ===== */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
+  border-radius: 9999px;
 }
 
-/* ===== Scrollbar ===== */
-html {
-  scrollbar-gutter: stable;
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.7);
 }
 
-/* ===== Selection ===== */
-::selection {
-  background: rgba(102, 126, 234, 0.2);
-  color: var(--color-text);
-}
-
-/* ===== Prevent horizontal scroll ===== */
-body {
-  overflow-x: hidden;
+/* Screen reader only utility fallback */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

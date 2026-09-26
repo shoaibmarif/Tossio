@@ -1,146 +1,131 @@
-# Coin Flip Online
+# coinfliptool — Production-Ready Coin Flip Game & Probability Tool
 
-A polished, production-ready virtual coin flipper built with React, TypeScript, and Vite. Deployable as a static site on GitHub Pages.
+A high-performance, accessible, privacy-first virtual coin flipper and interactive probability laboratory built with **React 19**, **TypeScript**, **Tailwind CSS**, and **Vite**.
 
-## Features
+Created by **Shoaib Arif**:
+- 🌐 **Portfolio**: [https://shoaibarif.vercel.app/](https://shoaibarif.vercel.app/)
+- 💻 **GitHub**: [https://github.com/shoaibmarif](https://github.com/shoaibmarif)
+- 💼 **LinkedIn**: [https://www.linkedin.com/in/shoaibmarif/](https://www.linkedin.com/in/shoaibmarif/)
 
-- 🪙 **Fair Coin Flip** — Uses `crypto.getRandomValues()` for cryptographically secure randomness
-- 🎨 **Smooth 3D Animation** — CSS-only coin flip animation with `prefers-reduced-motion` support
-- 📊 **Live Statistics** — Track total flips, heads/tails counts and percentages
-- 📜 **Flip History** — View your last 50 results
-- ⚡ **Batch Flipping** — Flip 10, 20, 50, 100, or 1,000 coins instantly
-- 💾 **Persistent Data** — Statistics and history saved to localStorage
-- ♿ **Accessible** — Semantic HTML, ARIA live regions, keyboard navigation
-- 📱 **Mobile-First** — Responsive design from 320px to large desktop
-- 🔍 **SEO Optimized** — Meta tags, Open Graph, Twitter Cards, JSON-LD
-- 🚀 **Lightweight** — ~50 KB gzipped, no external fonts or images
+Designed as a frontend-only application with zero backend or database requirements, certified cryptographically secure randomness, installable PWA support, and ready for instant deployment to Netlify or any static host.
 
-## Quick Start
+---
+
+## 🌟 Key Features
+
+### 1. Core Coin Flipping Experience
+- **CSPRNG Randomness**: Uses the browser's hardware-backed Web Cryptography API (`crypto.getRandomValues()`) for authentic, unmanipulated 50/50 probability.
+- **Realistic 3D Physics Animation**: Lifelike lift, horizontal spinning revolutions, and settle bounce with dynamic contact shadows.
+- **Original Coin Designs**: Original metallic artwork (Classic Gold, Royal Silver, Antique Bronze, Cyber Neon) with detailed rim ridges and beaded relief rings—no copyrighted or real currency imagery.
+- **Animation Presets & Reduced Motion**: Fast (400ms), Normal (750ms), Slow (1200ms), and custom Reduced-Motion mode respecting `prefers-reduced-motion`.
+- **Strict State Management**: Eliminates double-clicks, duplicate updates, or animation overlap bugs during flips.
+
+### 2. High-Performance Batch Simulations (up to 1,000,000 Flips)
+- **Instant Monte Carlo Experiments**: Run batches of 100, 1,000, 10,000, or up to 1,000,000 flips in milliseconds using bitwise population-count operations.
+- **Empirical Visualizations**: Interactive SVG donut charts, distribution bars, and deviation calculations from the theoretical 50.0% benchmark.
+- **Saved Experiment History**: Saves the last 100 experiments locally with detailed views, deletion, and highlight badges for the **Closest to 50/50** and **Largest Sample Deviation**.
+- **Social Sharing**: One-click sharing via the Web Share API (`navigator.share()`) with automated clipboard fallback.
+
+### 3. Probability Learning Lab
+- **Interactive Convergence Lab**: Watch the Law of Large Numbers in action as empirical Heads % converges toward the theoretical 50% line across sample sizes from 1 to 50,000 flips.
+- **Educational Guides**: Explanations of trial independence, Gambler's Fallacy, sample variance, and margin of error formulas.
+- **Physical Coin Fairness Tester ("Is My Coin Fair?")**: Descriptive analysis tool for evaluating physical coin flip trial data.
+
+### 4. Interactive Tools & Mini-Games
+- **Decision Coin Flip**: Enter Option A vs Option B to break analysis paralysis with an unbiased, private coin flip.
+- **Deterministic Daily Challenge**: Generates a synchronized challenge for every player globally using the current date string (`YYYY-MM-DD`).
+- **Prediction Game Mode**: Guess Heads or Tails before flipping to test intuition, build correct streaks, and earn combo score bonuses (+2 for 3 streak, +5 for 5 streak, +10 for 10 streak).
+- **Custom Coin Studio**: Customize coin labels (e.g. YES / NO), symbols (e.g. ☀️ / 🌙), and metallic finishes with live 3D preview.
+- **Weighted Coin Simulation**: Configurable biased coin simulation (e.g., 70% Heads / 30% Tails) with a clear disclaimer separating it from fair mode.
+
+### 5. Statistics, Streaks & Achievements
+- **Comprehensive Streak Engine**: Tracks current streaks, longest Heads streak, longest Tails streak, and longest overall streak.
+- **14 Local Achievements**: Milestones from "First Toss" to "Centurion", "Hot Streak", "Big Data", and "Seer".
+- **Zero-Telemetry Privacy**: All data is stored in the browser using versioned schema `coinflip:v1`. Nothing is sent to any server.
+
+### 6. Audio, Accessibility & PWA
+- **Synthesized Web Audio API**: Procedural sound effects for coin flicks, spinning ticks, chime landing, and victory fanfares without external audio files.
+- **Accessible & Screen-Reader Ready**: ARIA live region (`role="status" aria-live="polite"`), high contrast, semantic HTML, and 56px+ touch targets.
+- **Keyboard Shortcuts**:
+  - <kbd>Space</kbd> / <kbd>Enter</kbd> — Flip Coin
+  - <kbd>R</kbd> — Reset Stats
+  - <kbd>H</kbd> — Predict Heads
+  - <kbd>T</kbd> — Predict Tails
+  - <kbd>Esc</kbd> — Dismiss Modals
+- **PWA & Offline Capable**: `manifest.webmanifest`, service worker (`sw.js`), and cache-first offline support.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework**: React 19 (`react`, `react-dom`)
+- **Language**: TypeScript (`tsc -b`)
+- **Styling**: Tailwind CSS & PostCSS
+- **Routing**: React Router DOM 7
+- **Icons**: Lucide React
+- **Testing**: Vitest (`vitest run` with Happy-DOM)
+- **Bundler**: Vite 6
+
+---
+
+## 🚀 Getting Started
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/coin-flip.git
+cd coin-flip
+
 # Install dependencies
 npm install
+```
 
-# Start development server
+### Development Server
+
+```bash
 npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
 ```
 
-## Project Structure
+Open `http://localhost:5173` in your browser.
 
-```
-src/
-├── components/       # Reusable UI components
-│   ├── AdSlot.tsx       # Future ad integration (renders nothing)
-│   ├── BatchFlip.tsx    # Batch flip interface
-│   ├── Coin.tsx         # 3D animated coin
-│   ├── CoinOptions.tsx  # Coin type selector
-│   ├── ContentSections.tsx  # SEO content & FAQ
-│   ├── FlipButton.tsx   # Primary flip button
-│   ├── Footer.tsx       # Site footer
-│   ├── Header.tsx       # Site header
-│   ├── History.tsx      # Flip history display
-│   ├── ProbabilityInfo.tsx  # Educational probability section
-│   ├── ResultDisplay.tsx    # Result announcement
-│   └── Statistics.tsx   # Flip statistics display
-├── games/
-│   └── coin-flip/
-│       ├── logic.ts     # Coin flip game logic
-│       └── types.ts     # TypeScript type definitions
-├── hooks/
-│   ├── useFlipState.ts      # Main state management hook
-│   └── useReducedMotion.ts  # Reduced motion preference hook
-├── lib/
-│   ├── analytics.ts     # Abstract analytics layer
-│   ├── random.ts        # Secure random number generation
-│   └── storage.ts       # Safe localStorage wrapper
-├── pages/
-│   └── Home.tsx         # Main page layout
-├── seo/
-│   └── metadata.ts      # SEO metadata constants
-├── styles/
-│   └── global.css       # Global styles & design tokens
-├── App.tsx              # App root component
-└── main.tsx             # Entry point
+### Running Unit Tests
+
+```bash
+npm test
 ```
 
-## Deployment to GitHub Pages
+Runs 27 automated unit tests covering cryptographic random bits, streak detection, consistent percentage rounding, batch experiments, daily challenge determinism, and storage migrations.
 
-### Option 1: GitHub Actions (Recommended)
-
-1. Push this project to a GitHub repository.
-
-2. Create `.github/workflows/deploy.yml`:
-
-```yaml
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [main]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-      - id: deployment
-        uses: actions/deploy-pages@v4
-```
-
-3. In your repository settings, go to **Pages** → set source to **GitHub Actions**.
-
-4. Update `vite.config.ts` with your repository name:
-```ts
-export default defineConfig({
-  base: '/your-repo-name/',
-  plugins: [react()],
-})
-```
-
-5. Update the canonical URL in `index.html` to match your GitHub Pages URL.
-
-### Option 2: Manual Deployment
+### Production Build
 
 ```bash
 npm run build
-# Deploy the `dist/` folder to any static hosting provider
 ```
 
-## Configuration
+Compiles TypeScript and bundles static assets into `dist/`.
 
-### Analytics
+---
 
-The app includes an abstract analytics layer. To connect a real provider, implement the `AnalyticsProvider` interface in `src/lib/analytics.ts`.
+## 🌐 Netlify Deployment
 
-### Advertising
+The project includes `public/_redirects` configured for Single Page Application client-side routing (`/* /index.html 200`):
 
-The `<AdSlot />` component renders nothing by default. Replace its implementation with your ad provider's component when ready.
+1. Link your Git repository on Netlify.
+2. Set Build Command: `npm run build`
+3. Set Publish Directory: `dist`
+4. Deploy! All routes (`/`, `/coin-flip-experiment`, `/coin-flip-statistics`, `/coin-flip-probability`, `/decision-coin-flip`, `/daily-coin-flip`, etc.) will route seamlessly.
 
-## License
+---
 
-MIT
+## 🔒 Privacy & Security
 
+- **100% Client-Side**: No backend, no cookies, no third-party trackers.
+- **Web Crypto API**: Certified random bit generation via `crypto.getRandomValues()`.
+- **Local Storage**: User data remains strictly on the client device under key `coinflip:v1`.
+
+---
+
+## 📄 License
+
+MIT License. Free for educational, commercial, and personal use.
