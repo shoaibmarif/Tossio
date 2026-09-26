@@ -1,9 +1,7 @@
 {
-  "name": "coinfliptool",
+  "name": "coin-flip",
   "private": true,
   "version": "1.0.0",
-  "author": "Shoaib Arif <https://shoaibarif.vercel.app/>",
-  "homepage": "https://shoaibarif.vercel.app/",
   "type": "module",
   "scripts": {
     "dev": "vite",
