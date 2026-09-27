@@ -138,16 +138,8 @@ export const Footer: React.FC = () => {
               Directory & Legal
             </h4>
             <ul className="space-y-1.5 text-xs">
-              <li>
-                <Link to="/contact" className="hover:text-amber-400 transition-colors">
-                  Contact & Support
-                </Link>
-              </li>
-              <li>
-                <Link to="/sitemap" className="hover:text-amber-400 transition-colors">
-                  HTML Sitemap
-                </Link>
-              </li>
+        
+
               <li>
                 <Link to="/privacy" className="hover:text-amber-400 transition-colors">
                   Privacy Policy
@@ -176,9 +168,7 @@ export const Footer: React.FC = () => {
             </a>
             . Open source & certified 50/50 fair.
           </div>
-          <div className="flex items-center gap-1">
-            <span>Powered by crypto.getRandomValues()</span>
-          </div>
+   
         </div>
       </div>
     </footer>
