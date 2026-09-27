@@ -14,7 +14,7 @@ export const AboutPage: React.FC = () => {
     name: 'About coinfliptool & The Random Engine',
     description:
       'Learn about the engineering behind coinfliptool: Web Cryptography API random sampling, client-side execution, and offline PWA architecture developed by Shoaib Arif.',
-    url: 'https://coin-flip-tool.netlify.app/about',
+    url: 'https://coinfliptool.netlify.app/about',
     author: {
       '@type': 'Person',
       name: 'Shoaib Arif',

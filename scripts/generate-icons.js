@@ -103,6 +103,57 @@ function createCoinPNG(size) {
   return Buffer.concat([signature, ihdr, idat, iend]);
 }
 
-fs.writeFileSync('./public/icon-192.png', createCoinPNG(192));
-fs.writeFileSync('./public/icon-512.png', createCoinPNG(512));
-console.log('Successfully generated public/icon-192.png and public/icon-512.png');
+function createICO(images) {
+  const count = images.length;
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0); // reserved
+  header.writeUInt16LE(1, 2); // 1 = ICO
+  header.writeUInt16LE(count, 4); // count
+
+  let offset = 6 + 16 * count;
+  const dirEntries = [];
+  const imageBuffers = [];
+
+  for (const img of images) {
+    const entry = Buffer.alloc(16);
+    entry.writeUInt8(img.width >= 256 ? 0 : img.width, 0);
+    entry.writeUInt8(img.height >= 256 ? 0 : img.height, 1);
+    entry.writeUInt8(0, 2); // color count
+    entry.writeUInt8(0, 3); // reserved
+    entry.writeUInt16LE(1, 4); // color planes
+    entry.writeUInt16LE(32, 6); // bpp
+    entry.writeUInt32LE(img.buffer.length, 8); // size
+    entry.writeUInt32LE(offset, 12); // offset
+
+    dirEntries.push(entry);
+    imageBuffers.push(img.buffer);
+    offset += img.buffer.length;
+  }
+
+  return Buffer.concat([header, ...dirEntries, ...imageBuffers]);
+}
+
+const png16 = createCoinPNG(16);
+const png32 = createCoinPNG(32);
+const png48 = createCoinPNG(48);
+const png96 = createCoinPNG(96);
+const png180 = createCoinPNG(180);
+const png192 = createCoinPNG(192);
+const png512 = createCoinPNG(512);
+
+fs.writeFileSync('./public/favicon-16x16.png', png16);
+fs.writeFileSync('./public/favicon-32x32.png', png32);
+fs.writeFileSync('./public/favicon-48x48.png', png48);
+fs.writeFileSync('./public/favicon-96x96.png', png96);
+fs.writeFileSync('./public/apple-touch-icon.png', png180);
+fs.writeFileSync('./public/icon-192.png', png192);
+fs.writeFileSync('./public/icon-512.png', png512);
+
+const icoBuffer = createICO([
+  { width: 48, height: 48, buffer: png48 },
+  { width: 32, height: 32, buffer: png32 },
+  { width: 16, height: 16, buffer: png16 },
+]);
+fs.writeFileSync('./public/favicon.ico', icoBuffer);
+
+console.log('Successfully generated all Google-compliant favicons and favicon.ico.');

@@ -44,73 +44,73 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
 </svg>`;
 fs.writeFileSync('./public/favicon.svg', svg, 'utf8');
 
-const robots = `User-agent: *\nAllow: /\n\nSitemap: https://coin-flip-tool.netlify.app/sitemap.xml\n`;
+const robots = `User-agent: *\nAllow: /\n\nSitemap: https://coinfliptool.netlify.app/sitemap.xml\n`;
 fs.writeFileSync('./public/robots.txt', robots, 'utf8');
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://coin-flip-tool.netlify.app/</loc>
+    <loc>https://coinfliptool.netlify.app/</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/coin-flip-experiment</loc>
+    <loc>https://coinfliptool.netlify.app/coin-flip-experiment</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/coin-flip-statistics</loc>
+    <loc>https://coinfliptool.netlify.app/coin-flip-statistics</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/coin-flip-probability</loc>
+    <loc>https://coinfliptool.netlify.app/coin-flip-probability</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/decision-coin-flip</loc>
+    <loc>https://coinfliptool.netlify.app/decision-coin-flip</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/daily-coin-flip</loc>
+    <loc>https://coinfliptool.netlify.app/daily-coin-flip</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/how-coin-flipping-works</loc>
+    <loc>https://coinfliptool.netlify.app/how-coin-flipping-works</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/faq</loc>
+    <loc>https://coinfliptool.netlify.app/faq</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/about</loc>
+    <loc>https://coinfliptool.netlify.app/about</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/contact</loc>
+    <loc>https://coinfliptool.netlify.app/contact</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://coin-flip-tool.netlify.app/sitemap</loc>
+    <loc>https://coinfliptool.netlify.app/sitemap</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -121,11 +121,17 @@ fs.writeFileSync('./public/sitemap.xml', sitemap, 'utf8');
 const redirects = `/*    /index.html   200\n`;
 fs.writeFileSync('./public/_redirects', redirects, 'utf8');
 
-const sw = `const CACHE_NAME = 'coinflip-v1';
+const sw = `const CACHE_NAME = 'coinflip-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.webmanifest',
+  '/favicon.ico',
+  '/favicon-48x48.png',
+  '/favicon-96x96.png',
+  '/favicon-32x32.png',
+  '/favicon-16x16.png',
+  '/apple-touch-icon.png',
   '/favicon.svg',
   '/icon-192.png',
   '/icon-512.png',

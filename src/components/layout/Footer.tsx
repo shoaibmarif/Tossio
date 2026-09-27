@@ -9,12 +9,15 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Brand info */}
           <div className="space-y-3 md:col-span-2">
-            <div className="flex items-center gap-2 font-black text-xl text-white">
+            <Link
+              to="/"
+              className="brand-logo inline-flex items-center gap-2 font-black text-xl text-white outline-none focus:outline-none focus:ring-0 focus-visible:outline-none border-none select-none"
+            >
               <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-white">
                 <Coins className="w-4 h-4" />
               </div>
-              <span>coinfliptool</span>
-            </div>
+              <span>coinflip<span className="text-amber-400">tool</span></span>
+            </Link>
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
               Fast, privacy-first, cryptographically fair virtual coin flip simulator & probability analysis engine. Works completely offline.
             </p>

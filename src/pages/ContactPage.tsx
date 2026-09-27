@@ -18,7 +18,7 @@ export const ContactPage: React.FC = () => {
     '@type': 'ContactPage',
     name: 'Contact CoinFlip.io Support',
     description: 'Get in touch with the CoinFlip.io development team for inquiries, bug reports, and educational partnerships.',
-    url: 'https://coin-flip-tool.netlify.app/contact',
+    url: 'https://coinfliptool.netlify.app/contact',
   };
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -67,8 +67,8 @@ export const Home: React.FC = () => {
   const homepageJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'Free Coin Flip Online – Heads or Tails',
-    url: 'https://coin-flip-tool.netlify.app/',
+    name: 'coinfliptool – Free Virtual Coin Flip & Probability Simulator',
+    url: 'https://coinfliptool.netlify.app/',
     description:
       'Flip a coin online instantly with a realistic 3D animated coin. Powered by cryptographically secure random values (crypto.getRandomValues()), complete with batch experiments, streak tracking, and probability statistics.',
     applicationCategory: 'GameApplication',

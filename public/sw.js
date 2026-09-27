@@ -1,8 +1,14 @@
-const CACHE_NAME = 'coinflip-v1';
+const CACHE_NAME = 'coinflip-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.webmanifest',
+  '/favicon.ico',
+  '/favicon-48x48.png',
+  '/favicon-96x96.png',
+  '/favicon-32x32.png',
+  '/favicon-16x16.png',
+  '/apple-touch-icon.png',
   '/favicon.svg',
   '/icon-192.png',
   '/icon-512.png',
