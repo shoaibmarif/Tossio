@@ -77,7 +77,10 @@ export interface DailyChallengeState {
   progress: number;
   isCompleted: boolean;
   completedAt?: number;
-  streakRecord: number;
+    streakRecord: number;
+  /** Side and length of today's current run (streak challenge only). */
+  runSide?: CoinSide;
+  runLength?: number;
 }
 
 export interface Achievement {

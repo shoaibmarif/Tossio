@@ -111,7 +111,7 @@ export function analyzePhysicalObservation(heads: number, tails: number): {
     sampleDescription = 'Please enter at least one coin flip observation.';
   } else if (total < 30) {
     sampleDescription =
-      'Small sample size: Short trials of 1–30 flips frequently display noticeable deviation due to natural random fluctuation.';
+      'Small sample size: Short trials of 1-30 flips frequently display noticeable deviation due to natural random fluctuation.';
   } else if (total < 100) {
     sampleDescription =
       'Moderate sample size: Outcomes often approach 50/50, but short streaks still shift the ratio by several percentage points.';

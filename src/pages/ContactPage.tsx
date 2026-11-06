@@ -1,125 +1,99 @@
-import React, { useState } from 'react';
-import { SEOHead } from '../components/seo/SEOHead';
-import { Mail, Send, CheckCircle2 } from 'lucide-react';
+import React from 'react';
+import { Mail, Globe, Bug } from 'lucide-react';
+import { Github, Linkedin } from '../components/ui/BrandIcons';
+import { SeoMeta } from '../components/seo/SeoMeta';
+import { PageHeader } from '../components/layout/PageHeader';
+import { SITE } from '../seo/site';
 
-export const ContactPage: React.FC = () => {
-  const [submitted, setSubmitted] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+const CHANNELS = [
+  {
+    href: `mailto:${SITE.author.email}?subject=${encodeURIComponent('Tossio')}`,
+    icon: Mail,
+    tint: 'bg-heads-100 text-heads-800 dark:bg-heads-900/40 dark:text-heads-200',
+    title: 'Email',
+    value: SITE.author.email,
+    body: 'The quickest way to reach me. Questions, ideas, feedback, or just hello.',
+  },
+  {
+    href: SITE.author.linkedin,
+    icon: Linkedin,
+    tint: 'bg-tails-100 text-tails-700 dark:bg-tails-900/40 dark:text-tails-200',
+    title: 'LinkedIn',
+    value: 'linkedin.com/in/shoaibmarif',
+    body: 'Connect or send a message on LinkedIn.',
+  },
+  {
+    href: SITE.author.url,
+    icon: Globe,
+    tint: 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200',
+    title: 'Portfolio',
+    value: 'shoaibarif.vercel.app',
+    body: 'See what else I’ve been working on.',
+  },
+  {
+    href: SITE.issues,
+    icon: Bug,
+    tint: 'bg-heads-100 text-heads-800 dark:bg-heads-900/40 dark:text-heads-200',
+    title: 'Report a bug',
+    value: 'GitHub issues',
+    body: 'Found something broken? Open an issue with your browser, device and what happened.',
+  },
+];
 
-  const breadcrumbs = [
-    { name: 'Home', path: '/' },
-    { name: 'Contact', path: '/contact' },
-  ];
+export const ContactPage: React.FC = () => (
+  <div className="mx-auto max-w-3xl">
+    <SeoMeta canonicalPath="/contact" />
+    <PageHeader
+      title="Contact"
+      intro={`${SITE.name} is built and maintained by ${SITE.author.name}. I’d love to hear from you.`}
+    />
 
-  const contactJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ContactPage',
-    name: 'Contact CoinFlip.io Support',
-    description: 'Get in touch with the CoinFlip.io development team for inquiries, bug reports, and educational partnerships.',
-    url: 'https://coinfliptool.netlify.app/contact',
-  };
+    <ul className="grid gap-4 sm:grid-cols-2">
+      {CHANNELS.map((c) => {
+        const external = !c.href.startsWith('mailto:');
+        return (
+          <li key={c.title}>
+            <a
+              href={c.href}
+              {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+              className="card flex h-full gap-4 p-5 transition-colors hover:border-zinc-300 dark:hover:border-zinc-700"
+            >
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${c.tint}`}>
+                <c.icon className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <span>
+                <span className="block font-medium">{c.title}</span>
+                <span className="block break-all text-sm text-tails-600 dark:text-tails-400">{c.value}</span>
+                <span className="mt-1 block text-sm leading-6 text-zinc-600 dark:text-zinc-400">{c.body}</span>
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+    <div className="prose-page mt-12">
+      <h2>Open source</h2>
+      <p>
+        {SITE.name}’s code is public on{' '}
+        <a href={SITE.repo} target="_blank" rel="noopener">
+          GitHub
+        </a>
+        . Pull requests and ideas are welcome.
+      </p>
 
-  return (
-    <>
-      <SEOHead
-        title="Contact Us – CoinFlip.io Support & Feedback"
-        description="Have questions or suggestions about our virtual coin flip tool or probability lab? Contact the CoinFlip.io team."
-        keywords="contact coin flip, coinflip support, feedback, bug report"
-        canonicalPath="/contact"
-        breadcrumbs={breadcrumbs}
-        jsonLd={contactJsonLd}
-      />
+      <h2>Reporting an accessibility problem</h2>
+      <p>
+        If something is hard to read, hard to reach with a keyboard, or doesn’t work well with a screen reader,
+        please tell me which page you were on and what device and browser you were using.
+      </p>
+    </div>
 
-      <div className="space-y-10 max-w-2xl mx-auto">
-        <div className="text-center space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-            Get In Touch
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white flex items-center justify-center gap-2.5">
-            <Mail className="w-8 h-8 text-amber-500" />
-            Contact & Support
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto">
-            Questions, probability feedback, or ideas for educational features? We would love to hear from you.
-          </p>
-        </div>
-
-        <div className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
-          {submitted ? (
-            <div className="py-8 text-center space-y-3">
-              <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-                Thank You for Reaching Out!
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
-                Your feedback has been noted. Because CoinFlip.io is 100% frontend, all inquiries are processed locally or via open source issue tracking.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1">
-                <label htmlFor="name" className="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">
-                  Your Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="e.g. Jane Doe"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label htmlFor="email" className="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="jane@example.com"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label htmlFor="message" className="text-xs font-bold uppercase text-slate-700 dark:text-slate-300">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  required
-                  rows={4}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  placeholder="Share your thoughts or questions..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3.5 px-6 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all"
-              >
-                <Send className="w-4 h-4" />
-                <span>Submit Feedback</span>
-              </button>
-            </form>
-          )}
-        </div>
-      </div>
-    </>
-  );
-};
+    <p className="mt-10 flex items-center gap-2 text-sm text-zinc-500">
+      <Github className="h-4 w-4" aria-hidden="true" />
+      <a href={SITE.repo} target="_blank" rel="noopener" className="hover:text-zinc-900 dark:hover:text-white">
+        github.com/shoaibmarif/tossio
+      </a>
+    </p>
+  </div>
+);

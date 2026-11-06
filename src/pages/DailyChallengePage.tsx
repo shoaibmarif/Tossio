@@ -5,9 +5,13 @@ import { PredictionGameCard } from '../components/game/PredictionGameCard';
 import { Coin } from '../components/coin/Coin';
 import { CoinResult } from '../components/coin/CoinResult';
 import { FlipControls } from '../components/flip/FlipControls';
-import { SEOHead } from '../components/seo/SEOHead';
+import { SeoMeta } from '../components/seo/SeoMeta';
+import { PageHeader } from '../components/layout/PageHeader';
+import { appJsonLd } from '../seo/head';
+import { getRouteMeta } from '../seo/routes';
 import { getTodayDateString, generateDailyChallenge } from '../game/challenges';
-import { Calendar } from 'lucide-react';
+
+const ROUTE = getRouteMeta('/daily-coin-flip')!;
 
 export const DailyChallengePage: React.FC = () => {
   const {
@@ -26,36 +30,13 @@ export const DailyChallengePage: React.FC = () => {
   const currentChallenge =
     state.dailyChallengeProgress[today] || generateDailyChallenge(today);
 
-  const dailyJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'Daily Coin Flip Challenge & Prediction Mini-Game',
-    description:
-      'Complete today’s synchronized global coin toss challenge. Test your prediction accuracy, accumulate bonus streaks, and unlock achievements.',
-  };
 
   return (
     <>
-      <SEOHead
-        title="Daily Coin Flip Challenge & Prediction Game"
-        description="Take on today's deterministic coin flip challenge, test your prediction instincts, track streaks, and climb the scoreboard."
-        canonicalPath="/daily-coin-flip"
-        jsonLd={dailyJsonLd}
-      />
+      <SeoMeta canonicalPath="/daily-coin-flip" structuredData={appJsonLd('/daily-coin-flip', ROUTE.title, ROUTE.description)} />
 
       <div className="space-y-10 max-w-3xl mx-auto">
-        <div className="text-center space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-            Mini-Game & Challenges
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white flex items-center justify-center gap-2.5">
-            <Calendar className="w-8 h-8 text-amber-500" />
-            Daily Challenge & Prediction
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto">
-            Test yourself with a synchronized daily objective or play Prediction Mode to test your intuition against pure randomness.
-          </p>
-        </div>
+        <PageHeader title="Daily coin flip challenge" intro="Everyone gets the same goal each day. Below it, the prediction game: call heads or tails before you flip and see how long you can keep guessing right." />
 
         {/* Daily Deterministic Challenge Card */}
         <DailyChallengeCard challenge={currentChallenge} />

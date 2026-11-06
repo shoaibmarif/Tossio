@@ -1,117 +1,90 @@
 import React from 'react';
 import { InteractiveConvergenceLab } from '../components/probability/InteractiveConvergenceLab';
 import { FairnessTester } from '../components/tools/FairnessTester';
-import { SEOHead } from '../components/seo/SEOHead';
-import { TrendingUp, BookOpen, Brain, HelpCircle } from 'lucide-react';
+import { SeoMeta } from '../components/seo/SeoMeta';
+import { PageHeader } from '../components/layout/PageHeader';
 
 export const ProbabilityPage: React.FC = () => {
-  const probabilityJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: 'Coin Flip Probability & The Law of Large Numbers Explained',
-    description:
-      'Learn how coin flip probability works, why independent trials stay fair at 50/50, and explore an interactive simulation demonstrating convergence and sample variance.',
-    author: {
-      '@type': 'Organization',
-      name: 'CoinFlip.io',
-    },
-  };
 
   return (
     <>
-      <SEOHead
-        title="Coin Flip Probability, Statistics & Law of Large Numbers"
-        description="Understand coin toss mathematics, the Law of Large Numbers, trial independence, and test physical coin fairness in our interactive probability lab."
-        canonicalPath="/coin-flip-probability"
-        jsonLd={probabilityJsonLd}
-      />
+      <SeoMeta canonicalPath="/coin-flip-probability" />
 
       <div className="space-y-12 max-w-4xl mx-auto">
-        <div className="text-center space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-            Educational Science Lab
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
-            Coin Flip Probability & Convergence
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto">
-            Discover the mathematics of randomness, why streaks happen, and how large samples inevitably converge toward 50%.
-          </p>
-        </div>
+        <PageHeader title="Coin flip probability" intro="The maths behind heads or tails: why it’s 50/50, why streaks happen more than you’d think, and how results even out over many flips." />
 
         {/* Interactive Convergence Lab */}
         <InteractiveConvergenceLab />
 
-        {/* Deep Dive Educational Content */}
-        <section className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-8">
-          <div className="border-b border-slate-100 dark:border-slate-700/60 pb-3 flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-amber-500" />
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Core Principles of Coin Toss Probability
-            </h2>
-          </div>
+        <article className="prose-page">
+          <h2>It really is 50/50</h2>
+          <p>
+            A coin has two sides, and on a fair coin neither is favoured, so each has a probability of 1 in 2:
+            50% heads, 50% tails. That doesn’t mean you’ll get exactly half heads in every session. It means that
+            the more you flip, the closer to half you’ll get.
+          </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-            <div className="space-y-3">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Brain className="w-4 h-4 text-amber-500" />
-                1. What Probability Means
-              </h3>
-              <p>
-                Probability measures the likelihood of an outcome occurring out of all possible equally likely scenarios. For a fair physical or digital coin with two outcomes (Heads or Tails):
-              </p>
-              <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl font-mono text-xs border border-slate-200 dark:border-slate-800">
-                P(Heads) = 1 / 2 = 0.50 (50%)<br />
-                P(Tails) = 1 / 2 = 0.50 (50%)
-              </div>
-              <p>
-                This indicates that over an infinite series of tosses, exactly half are expected to land on Heads.
-              </p>
-            </div>
+          <h2>The coin doesn’t remember</h2>
+          <p>
+            Every flip is independent. After five heads in a row it’s tempting to think tails is “due”, but the
+            coin has no idea what happened before. The next flip is still exactly 50/50. Believing otherwise is
+            called the <strong>gambler’s fallacy</strong>, and it’s one of the most common mistakes people make
+            with chance.
+          </p>
 
-            <div className="space-y-3">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-indigo-500" />
-                2. Statistical Independence & Gambler&apos;s Fallacy
-              </h3>
-              <p>
-                A crucial attribute of a coin flip is <strong>independence</strong>. The coin possesses no memory of previous results.
-              </p>
-              <p>
-                The common belief that after a run of 5 Heads, Tails is &quot;due&quot; is called the <strong>Gambler&apos;s Fallacy</strong>. In reality, the 6th flip still has an exact 50% chance of landing Heads.
-              </p>
-            </div>
+          <h2>Streaks are more common than you think</h2>
+          <p>
+            The odds of a particular run are easy to work out: halve the chance for every extra flip. Here’s how
+            likely it is to get heads several times in a row, starting from your next flip:
+          </p>
+        </article>
 
-            <div className="space-y-3">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-emerald-500" />
-                3. Why Short Experiments Look Uneven
-              </h3>
-              <p>
-                In a brief session of 10 flips, getting 7 Heads (70%) and 3 Tails (30%) is statistically normal. The margin of error is inversely proportional to the square root of the sample size:
-              </p>
-              <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl font-mono text-xs border border-slate-200 dark:border-slate-800">
-                Margin of Error ≈ 1 / √N
-              </div>
-              <p>
-                For N = 100, deviation can easily be ±10 percentage points. For N = 10,000, deviation drops to ±1 percentage point.
-              </p>
-            </div>
+        <div className="overflow-x-auto">
+          <table className="w-full max-w-md text-left text-sm">
+            <thead className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
+              <tr>
+                <th className="py-2 pr-4 font-medium">Heads in a row</th>
+                <th className="py-2 pr-4 font-medium">Chance</th>
+                <th className="py-2 font-medium">About 1 in</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-200 tabular-nums dark:divide-zinc-800">
+              {[2, 3, 4, 5, 6, 7, 8, 10].map((n) => (
+                <tr key={n}>
+                  <td className="py-2 pr-4">{n}</td>
+                  <td className="py-2 pr-4">{(100 / 2 ** n).toFixed(n > 6 ? 2 : 1)}%</td>
+                  <td className="py-2">{(2 ** n).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-            <div className="space-y-3">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-purple-500" />
-                4. The Law of Large Numbers
-              </h3>
-              <p>
-                Formulated by mathematician Jacob Bernoulli, the Law of Large Numbers guarantees that as sample size \(N \to \infty\), the observed relative frequency converges almost surely to the true expected theoretical value.
-              </p>
-              <p>
-                Our simulation tool allows you to watch this phenomenon occur live in your browser using millions of cryptographically secure tosses.
-              </p>
-            </div>
-          </div>
-        </section>
+        <article className="prose-page">
+          <p>
+            Five in a row is 1 in 32, which sounds rare until you remember how many flips you make. If you flip 100
+            times, you’ll very likely see a streak of five or six somewhere along the way.
+          </p>
+
+          <h2>Why short runs look lopsided</h2>
+          <p>
+            With only 10 flips, getting 7 heads and 3 tails happens all the time. A handy rule of thumb: results almost always land within 1 divided by the square root of the number of flips of 50%. So for 100 flips, anywhere from about 40% to 60% heads is normal. For 10,000 flips, it narrows to about 49% to 51%.
+          </p>
+
+          <h2>The law of large numbers</h2>
+          <p>
+            That shrinking wobble has a name. The law of large numbers, first proved by Jacob Bernoulli in the
+            1700s, says that as you flip more and more, the share of heads gets closer and closer to 50%. It’s the
+            same reason casinos always win in the long run, even though individual gamblers win all the time. Try
+            it with the demo above, or run a million flips in the <a href="/coin-flip-experiment">simulator</a>.
+          </p>
+
+          <h2>What about real coins?</h2>
+          <p>
+            Real coins are very slightly biased towards the side that started facing up. You can read about that,
+            and about how an online flip gets its randomness, in <a href="/how-coin-flipping-works">how coin flipping works</a>.
+          </p>
+        </article>
 
         {/* Physical Coin Fairness Tester */}
         <FairnessTester />

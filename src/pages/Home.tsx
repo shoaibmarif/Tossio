@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Calendar, FlaskConical, Shuffle } from 'lucide-react';
 import { useCoinFlipGame } from '../context/CoinFlipContext';
 import { useKeyboardControls } from '../hooks/useKeyboardControls';
 import { Coin } from '../components/coin/Coin';
@@ -8,10 +10,36 @@ import { QuickStats } from '../components/flip/QuickStats';
 import { HistoryList } from '../components/flip/HistoryList';
 import { CustomCoinDesigner } from '../components/tools/CustomCoinDesigner';
 import { ExperimentModal } from '../components/experiments/ExperimentModal';
-import { SEOHead } from '../components/seo/SEOHead';
+import { SeoMeta } from '../components/seo/SeoMeta';
+import { Accordion } from '../components/ui/Accordion';
+import { FAQ_ITEMS } from '../data/faq';
+import { appJsonLd } from '../seo/head';
+import { getRouteMeta } from '../seo/routes';
 import type { BatchExperimentRecord } from '../types';
-import { Sparkles, HelpCircle, Shield, Cpu, BookOpen } from 'lucide-react';
-import { Link } from 'react-router-dom';
+
+const MORE = [
+  {
+    to: '/decision-coin-flip',
+    icon: Shuffle,
+    tint: 'bg-heads-100 text-heads-800 dark:bg-heads-900/40 dark:text-heads-200',
+    title: 'Decision flip',
+    body: 'Type your two options and let the coin pick. Great for settling who does the dishes.',
+  },
+  {
+    to: '/daily-coin-flip',
+    icon: Calendar,
+    tint: 'bg-tails-100 text-tails-700 dark:bg-tails-900/40 dark:text-tails-200',
+    title: 'Daily challenge',
+    body: 'A new goal every day, plus a prediction game. Call it before you flip and build a streak.',
+  },
+  {
+    to: '/coin-flip-experiment',
+    icon: FlaskConical,
+    tint: 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200',
+    title: 'Simulator',
+    body: 'Flip up to a million coins at once and watch the results settle towards 50/50.',
+  },
+];
 
 export const Home: React.FC = () => {
   const {
@@ -26,219 +54,125 @@ export const Home: React.FC = () => {
     setPrediction,
     updateSettings,
   } = useCoinFlipGame();
-
   const [activeExperiment, setActiveExperiment] = useState<BatchExperimentRecord | null>(null);
+  const home = getRouteMeta('/')!;
 
-  // Keyboard shortcut binding
+  // Space/Enter flips, H/T predicts. (No reset shortcut: one stray key shouldn't wipe your stats.)
   useKeyboardControls({
     onFlip: () => {
-      if (coinState !== 'FLIPPING') {
-        flipCoin();
-      }
+      if (coinState !== 'FLIPPING') flipCoin();
     },
-    onReset: resetAllStats,
     onPredict: setPrediction,
   });
 
-  const handleBatchFlip = (count: number) => {
-    const exp = runExperiment({ count });
-    setActiveExperiment(exp);
-  };
-
-  const faqItems = [
-    {
-      q: 'Is this virtual coin flip genuinely random and fair?',
-      a: 'Yes. Every toss uses the browser Web Cryptography API (crypto.getRandomValues()), which produces cryptographically secure entropy. Unlike basic Math.random(), each outcome is an authentic 50/50 probability event.',
-    },
-    {
-      q: 'Why did I get 6 Heads in a row? Is the coin rigged?',
-      a: 'No. In fair random processes, each flip is completely independent. A streak of 6 Heads has a probability of (1/2)^6 = 1.56% (approx 1 in 64 trials), which naturally happens during regular use.',
-    },
-    {
-      q: 'What is the Gambler’s Fallacy?',
-      a: 'The Gambler’s Fallacy is the mistaken belief that past flips influence future flips. A coin has no memory. If you flip 10 Heads in a row, the exact probability of Heads on flip #11 remains strictly 50%.',
-    },
-    {
-      q: 'Can I simulate 10,000 or 1,000,000 flips at once?',
-      a: 'Yes! Click "Batch Experiments" or "Custom..." to simulate up to 1,000,000 flips in milliseconds. The tool will calculate heads, tails, percentages, streaks, and deviation from 50/50 instantly.',
-    },
-  ];
-
-  const homepageJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'coinfliptool – Free Virtual Coin Flip & Probability Simulator',
-    url: 'https://coinfliptool.netlify.app/',
-    description:
-      'Flip a coin online instantly with a realistic 3D animated coin. Powered by cryptographically secure random values (crypto.getRandomValues()), complete with batch experiments, streak tracking, and probability statistics.',
-    applicationCategory: 'GameApplication',
-    operatingSystem: 'All',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-  };
+  const handleBatchFlip = (count: number) => setActiveExperiment(runExperiment({ count }));
 
   return (
-    <>
-      <SEOHead
-        title="Free Coin Flip Online – Heads or Tails Simulator"
-        description="Flip a fair virtual coin online with realistic 3D animation, cryptographically secure randomness, live streak tracking, batch experiments, and probability stats."
-        canonicalPath="/"
-        jsonLd={homepageJsonLd}
-      />
+    <div>
+      <SeoMeta canonicalPath="/" structuredData={appJsonLd('/', 'Tossio', home.description)} />
 
-      <div className="space-y-12">
-        {/* Top Hero Section */}
-        <section className="text-center max-w-3xl mx-auto space-y-3 pt-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs font-bold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Cryptographically Secure 50/50 Randomness</span>
-          </div>
+      <section className="mx-auto max-w-2xl text-center">
+        <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
+          Flip a coin: <span className="text-heads-600 dark:text-heads-400">heads</span> or{' '}
+          <span className="text-tails-600 dark:text-tails-400">tails</span>?
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+          Tap the coin or press Space. It’s a fair 50/50 every time, so you can settle a decision, start a game
+          or just see how long your lucky streak lasts.
+        </p>
+      </section>
 
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-            Free Coin Flip Online
-          </h1>
+      <section aria-label="Coin flip" className="card mx-auto mt-10 flex max-w-3xl flex-col items-center gap-6 p-6 shadow-card sm:p-8">
+        <Coin coinState={coinState} latestResult={latestResult} settings={state.settings} onFlip={() => flipCoin()} />
+        <CoinResult
+          coinState={coinState}
+          latestResult={latestResult}
+          flipNumber={latestFlipNumber}
+          customization={state.settings.customization}
+        />
+        <FlipControls
+          coinState={coinState}
+          soundEnabled={state.settings.soundEnabled}
+          onFlip={() => flipCoin()}
+          onBatchFlip={handleBatchFlip}
+          onToggleSound={() => updateSettings({ soundEnabled: !state.settings.soundEnabled })}
+          onReset={resetAllStats}
+          predictionSide={state.predictionStats.selectedPrediction}
+          onSelectPrediction={setPrediction}
+          isPredictionMode
+        />
+      </section>
 
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl mx-auto">
-            Toss a virtual coin for quick decisions, streak challenges, or batch experiments. Powered by browser cryptographic entropy for certified fairness.
+      <div className="mx-auto mt-6 grid max-w-3xl gap-6">
+        <section aria-label="Your flips">
+          <QuickStats stats={state.overallStats} customization={state.settings.customization} />
+        </section>
+        <section aria-label="Flip history">
+          <HistoryList history={state.history} customization={state.settings.customization} onClearHistory={clearHistory} />
+        </section>
+      </div>
+
+      <section aria-labelledby="more-heading" className="mx-auto mt-20 max-w-5xl">
+        <h2 id="more-heading" className="text-2xl font-semibold sm:text-3xl">
+          More than one way to flip
+        </h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {MORE.map((m) => (
+            <Link key={m.to} to={m.to} className="card group p-5 transition-colors hover:border-zinc-300 dark:hover:border-zinc-700">
+              <span className={`flex h-10 w-10 items-center justify-center rounded-lg ${m.tint}`}>
+                <m.icon className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <span className="mt-4 flex items-center justify-between font-medium">
+                {m.title}
+                <ArrowRight className="h-4 w-4 text-zinc-400 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              </span>
+              <span className="mt-1 block text-sm leading-6 text-zinc-600 dark:text-zinc-400">{m.body}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section aria-label="Design your coin" className="mx-auto mt-20 max-w-5xl">
+        <CustomCoinDesigner
+          customization={state.settings.customization}
+          onChange={(updated) => updateSettings({ customization: { ...state.settings.customization, ...updated } })}
+        />
+      </section>
+
+      <section aria-labelledby="fair-heading" className="mx-auto mt-20 grid max-w-5xl gap-10 lg:grid-cols-2">
+        <div>
+          <h2 id="fair-heading" className="text-2xl font-semibold sm:text-3xl">
+            Is it really 50/50?
+          </h2>
+          <p className="mt-3 leading-7 text-zinc-600 dark:text-zinc-400">
+            Yes. Each flip uses your browser’s cryptographic random number generator, the same kind used to
+            create secure passwords. Nothing about earlier flips makes one side more likely.
           </p>
-        </section>
-
-        {/* Primary Interactive Coin Arena */}
-        <section className="flex flex-col items-center gap-6" aria-label="Coin Flip Game">
-          {/* 3D Coin Graphic */}
-          <Coin
-            coinState={coinState}
-            latestResult={latestResult}
-            settings={state.settings}
-            onFlip={() => flipCoin()}
-          />
-
-          {/* Obvious Result Banner */}
-          <CoinResult
-            coinState={coinState}
-            latestResult={latestResult}
-            flipNumber={latestFlipNumber}
-            customization={state.settings.customization}
-          />
-
-          {/* Interactive Flip Controls */}
-          <FlipControls
-            coinState={coinState}
-            soundEnabled={state.settings.soundEnabled}
-            onFlip={() => flipCoin()}
-            onBatchFlip={handleBatchFlip}
-            onToggleSound={() => updateSettings({ soundEnabled: !state.settings.soundEnabled })}
-            onReset={resetAllStats}
-            predictionSide={state.predictionStats.selectedPrediction}
-            onSelectPrediction={setPrediction}
-            isPredictionMode={true}
-          />
-        </section>
-
-        {/* Quick Statistics & Streaks */}
-        <section aria-label="Flip Statistics">
-          <QuickStats
-            stats={state.overallStats}
-            customization={state.settings.customization}
-          />
-        </section>
-
-        {/* Flip History & Sequence Ribbon */}
-        <section aria-label="Flip History">
-          <HistoryList
-            history={state.history}
-            customization={state.settings.customization}
-            onClearHistory={clearHistory}
-          />
-        </section>
-
-        {/* Custom Coin Studio Preview */}
-        <section aria-label="Coin Studio">
-          <CustomCoinDesigner
-            customization={state.settings.customization}
-            onChange={(updated) => updateSettings({ customization: { ...state.settings.customization, ...updated } })}
-          />
-        </section>
-
-        {/* Educational Features Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-          <div className="p-6 bg-white dark:bg-slate-800/90 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-              <Cpu className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              CSPRNG Random Engine
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              Every toss samples hardware-based entropy via <code>crypto.getRandomValues()</code>, eliminating the statistical clustering found in pseudo-random algorithms.
-            </p>
-          </div>
-
-          <div className="p-6 bg-white dark:bg-slate-800/90 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-              <BookOpen className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Law of Large Numbers
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              While 10 flips can easily result in 70% Heads, simulating 10,000 flips quickly converges within fractions of a percent from the theoretical 50.0% benchmark.
-            </p>
-            <Link
-              to="/coin-flip-probability"
-              className="inline-block text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline pt-1"
-            >
-              Explore Probability Lab &rarr;
+          <p className="mt-3 leading-7 text-zinc-600 dark:text-zinc-400">
+            That doesn’t mean results will look even. Ten flips can easily come out 7 to 3, and runs of five or
+            six in a row are normal. Over thousands of flips, though, it settles very close to half and half.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
+            <Link to="/coin-flip-probability" className="inline-flex items-center gap-1 text-tails-600 hover:text-tails-700 dark:text-tails-400">
+              Coin flip probability <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <Link to="/how-coin-flipping-works" className="inline-flex items-center gap-1 text-tails-600 hover:text-tails-700 dark:text-tails-400">
+              How it works <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
-
-          <div className="p-6 bg-white dark:bg-slate-800/90 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-              <Shield className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              100% Client-Side Privacy
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              No account creation, cookies, or remote databases. All streaks, history, custom decisions, and settings remain solely on your device.
-            </p>
+        </div>
+        <div>
+          <h2 className="text-2xl font-semibold sm:text-3xl">Questions</h2>
+          <div className="mt-4">
+            <Accordion items={FAQ_ITEMS.slice(0, 4)} variant="lines" />
           </div>
-        </section>
+          <Link to="/faq" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-tails-600 hover:text-tails-700 dark:text-tails-400">
+            All questions <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
 
-        {/* Frequently Asked Questions */}
-        <section className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
-          <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-700/60 pb-4">
-            <HelpCircle className="w-5 h-5 text-amber-500" />
-            <h2 className="text-xl font-black text-slate-900 dark:text-white">
-              Frequently Asked Questions
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {faqItems.map((item, idx) => (
-              <div key={idx} className="space-y-1.5">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                  {item.q}
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  {item.a}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Experiment Modal */}
-        {activeExperiment && (
-          <ExperimentModal
-            experiment={activeExperiment}
-            onClose={() => setActiveExperiment(null)}
-          />
-        )}
-      </div>
-    </>
+      {activeExperiment && <ExperimentModal experiment={activeExperiment} onClose={() => setActiveExperiment(null)} />}
+    </div>
   );
 };

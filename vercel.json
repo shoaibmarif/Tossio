@@ -1,0 +1,132 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/coin-flip",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/flip-a-coin",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/virtual-coin-flip",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/heads-or-tails",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/coin-flip-online",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/random-coin-flip",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/coin-flip-simulator",
+      "destination": "/coin-flip-experiment",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/decision-coin-flip",
+      "destination": "/decision-coin-flip.html"
+    },
+    {
+      "source": "/daily-coin-flip",
+      "destination": "/daily-coin-flip.html"
+    },
+    {
+      "source": "/coin-flip-experiment",
+      "destination": "/coin-flip-experiment.html"
+    },
+    {
+      "source": "/coin-flip-probability",
+      "destination": "/coin-flip-probability.html"
+    },
+    {
+      "source": "/how-coin-flipping-works",
+      "destination": "/how-coin-flipping-works.html"
+    },
+    {
+      "source": "/coin-flip-statistics",
+      "destination": "/coin-flip-statistics.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/faq.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/sitemap",
+      "destination": "/sitemap.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
+      ]
+    }
+  ]
+}

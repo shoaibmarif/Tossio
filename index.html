@@ -2,90 +2,69 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!--seo-head-->
+    <meta name="application-name" content="Tossio" />
+    <meta name="apple-mobile-web-app-title" content="Tossio" />
+    <meta name="author" content="Shoaib Arif" />
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <meta name="format-detection" content="telephone=no" />
 
-    <!-- Primary Meta Tags -->
-    <title>coinfliptool – Free Virtual Coin Flip & Probability Simulator</title>
-    <meta name="description" content="coinfliptool: Flip a coin online instantly with a realistic 3D animated coin. Powered by cryptographically secure random values (crypto.getRandomValues()), complete with batch experiments, streak tracking, and probability statistics." />
-    <meta name="keywords" content="coinfliptool, coin flip, flip a coin, heads or tails, virtual coin, coin flipper, random coin flip, online coin toss, probability simulator, coin flip streaks, batch coin flip" />
-    <meta name="author" content="Shoaib Arif (https://shoaibarif.vercel.app/)" />
-    <link rel="canonical" href="https://coinfliptool.netlify.app/" />
-
-    <!-- Google Search & Browser Favicons (Multi-resolution & multiple of 48px compliant) -->
-    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <!-- Google Search shows a favicon only if it is a multiple of 48px (or SVG). -->
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
-
-    <!-- PWA Manifest -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#f59e0b" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://coinfliptool.netlify.app/" />
-    <meta property="og:title" content="coinfliptool – Free Virtual Coin Flip & Probability Simulator" />
-    <meta property="og:description" content="Flip a coin online instantly with realistic 3D animation, cryptographically secure randomness, batch simulations, and streak records on coinfliptool." />
-    <meta property="og:site_name" content="coinfliptool" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    />
 
-    <!-- Twitter / X -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="coinfliptool – Free Virtual Coin Flip & Probability Simulator" />
-    <meta name="twitter:description" content="Flip a coin online instantly with realistic 3D animation, cryptographically secure randomness, batch simulations, and streak records on coinfliptool." />
-
-    <!-- Initial Structured Data -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "coinfliptool",
-        "description": "Cryptographically secure virtual coin flip simulator & probability analysis engine.",
-        "url": "https://coinfliptool.netlify.app/",
-        "applicationCategory": "GameApplication",
-        "operatingSystem": "All",
-        "author": {
-          "@type": "Person",
-          "name": "Shoaib Arif",
-          "url": "https://shoaibarif.vercel.app/",
-          "sameAs": [
-            "https://github.com/shoaibmarif",
-            "https://www.linkedin.com/in/shoaibmarif/"
-          ]
-        },
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
-      }
+    <!-- Apply the saved theme before first paint to avoid a light/dark flash. -->
+    <script>
+      (function () {
+        try {
+          var s = (JSON.parse(localStorage.getItem('coinflip:v1') || '{}').settings || {});
+          var t = s.theme || 'light';
+          if (t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
     </script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJV669NQYE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-YJV669NQYE');
-</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJV669NQYE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-YJV669NQYE');
+    </script>
   </head>
-  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-amber-200 dark:selection:bg-amber-900">
-    <div id="root"></div>
+  <body>
+    <div id="root"><!--seo-body--></div>
+    <noscript>
+      <p style="max-width: 40rem; margin: 2rem auto; padding: 0 1rem; font-family: system-ui, sans-serif">
+        Tossio needs JavaScript to flip coins. Please enable JavaScript in your browser.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch(() => {});
+      if ('serviceWorker' in navigator && location.protocol === 'https:') {
+        addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').catch(function () {});
         });
       }
     </script>
   </body>
 </html>
-

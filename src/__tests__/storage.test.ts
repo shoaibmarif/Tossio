@@ -12,7 +12,7 @@ describe('Storage Persistence & Resilience', () => {
     const data = loadAppData();
     expect(data.version).toBe('coinflip:v1');
     expect(data.overallStats.totalFlips).toBe(0);
-    expect(data.settings.theme).toBe('system');
+    expect(data.settings.theme).toBe('light');
   });
 
   it('survives corrupted JSON without crashing', () => {

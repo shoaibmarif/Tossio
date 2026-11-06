@@ -3,9 +3,14 @@ import { useCoinFlipGame } from '../context/CoinFlipContext';
 import { WeightedSimulator } from '../components/tools/WeightedSimulator';
 import { SavedExperiments } from '../components/experiments/SavedExperiments';
 import { ExperimentModal } from '../components/experiments/ExperimentModal';
-import { SEOHead } from '../components/seo/SEOHead';
+import { SeoMeta } from '../components/seo/SeoMeta';
+import { PageHeader } from '../components/layout/PageHeader';
+import { appJsonLd } from '../seo/head';
+import { getRouteMeta } from '../seo/routes';
 import type { BatchExperimentRecord } from '../types';
 import { Play, Sparkles } from 'lucide-react';
+
+const ROUTE = getRouteMeta('/coin-flip-experiment')!;
 
 export const ExperimentPage: React.FC = () => {
   const { state, runExperiment, deleteExperiment, clearAllExperiments } = useCoinFlipGame();
@@ -25,48 +30,25 @@ export const ExperimentPage: React.FC = () => {
     }
   };
 
-  const experimentJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'Coin Flip Simulator & Batch Experiment Tool',
-    description:
-      'Simulate up to 1,000,000 virtual coin flips instantly. Analyze heads and tails distribution, deviation from 50/50, and streak lengths with interactive visualizations.',
-    applicationCategory: 'UtilityApplication',
-  };
 
   return (
     <>
-      <SEOHead
-        title="Coin Flip Simulator – Batch Tosses up to 1,000,000 Flips"
-        description="Run large-scale coin flip simulations up to 1 million tosses instantly. Track exact distributions, deviations from 50/50, and longest streaks with visual charts."
-        canonicalPath="/coin-flip-experiment"
-        jsonLd={experimentJsonLd}
-      />
+      <SeoMeta canonicalPath="/coin-flip-experiment" structuredData={appJsonLd('/coin-flip-experiment', ROUTE.title, ROUTE.description)} />
 
       <div className="space-y-10 max-w-4xl mx-auto">
-        <div className="text-center space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-            High-Performance Monte Carlo Engine
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
-            Coin Flip Batch Experiments
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto">
-            Simulate from 100 up to 1,000,000 coin tosses in milliseconds. Compare empirical outcomes with mathematical models.
-          </p>
-        </div>
+        <PageHeader title="Coin flip simulator" intro="Flip hundreds, thousands or even a million coins in one go and see how close you get to 50/50. Your last 100 runs are saved below." />
 
         {/* Quick Batch Launcher */}
-        <div className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
-          <div className="border-b border-slate-100 dark:border-slate-700/60 pb-3 flex items-center gap-2">
+        <div className="bg-white dark:bg-zinc-800/90 rounded-2xl p-6 sm:p-8 border border-zinc-200 dark:border-zinc-700 shadow-sm space-y-6">
+          <div className="border-b border-zinc-100 dark:border-zinc-700/60 pb-3 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-500" />
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-              Launch Standard Fair Coin Simulation
+            <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">
+              Fair coin
             </h2>
           </div>
 
           <div className="space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
               Quick Presets:
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -75,7 +57,7 @@ export const ExperimentPage: React.FC = () => {
                   key={num}
                   type="button"
                   onClick={() => handleQuickBatch(num)}
-                  className="py-3 px-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-slate-200 dark:border-slate-800 hover:border-amber-400 text-slate-800 dark:text-slate-200 font-black text-sm flex items-center justify-center gap-2 transition-all shadow-xs"
+                  className="py-3 px-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900/60 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-zinc-200 dark:border-zinc-800 hover:border-amber-400 text-zinc-800 dark:text-zinc-200 font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-card"
                 >
                   <Play className="w-4 h-4 fill-amber-500 text-amber-500" />
                   <span>{num.toLocaleString()} Flips</span>
@@ -88,7 +70,7 @@ export const ExperimentPage: React.FC = () => {
           <form onSubmit={handleCustomSubmit} className="flex flex-col sm:flex-row gap-3 pt-2">
             <div className="flex-1">
               <label htmlFor="custom-flip-count" className="sr-only">
-                Custom number of flips
+                Or choose your own number
               </label>
               <input
                 id="custom-flip-count"
@@ -97,15 +79,15 @@ export const ExperimentPage: React.FC = () => {
                 max="1000000"
                 value={batchCountInput}
                 onChange={(e) => setBatchCountInput(e.target.value)}
-                placeholder="Enter flips (1 to 1,000,000)"
-                className="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="1 to 1,000,000"
+                className="w-full px-4 py-3 rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-white font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>
             <button
               type="submit"
-              className="py-3 px-8 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-sm shadow-md transition-all whitespace-nowrap"
+              className="py-3 px-8 rounded-2xl bg-heads-400 hover:bg-heads-300 text-zinc-950 font-semibold text-sm shadow-md transition-all whitespace-nowrap"
             >
-              Run Custom Batch
+              Flip
             </button>
           </form>
         </div>

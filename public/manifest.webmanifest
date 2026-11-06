@@ -1,24 +1,19 @@
 {
-  "name": "coinfliptool – Free Virtual Coin Flip & Probability Simulator",
-  "short_name": "coinfliptool",
-  "description": "Fast, cryptographically secure virtual coin flip simulator & probability analysis engine. Works completely offline.",
+  "name": "Tossio - Flip a Coin",
+  "short_name": "Tossio",
+  "description": "Flip a coin online. Heads or tails, streaks, a daily challenge and a coin flip simulator.",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#f59e0b",
-  "background_color": "#0f172a",
-  "orientation": "portrait-primary",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa",
+  "lang": "en",
+  "categories": ["games", "utilities", "education"],
   "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

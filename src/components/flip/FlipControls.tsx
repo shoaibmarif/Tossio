@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import type { CoinState, CoinSide } from '../../types';
-import { Play, Volume2, VolumeX, RotateCcw, Sparkles } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 
 interface FlipControlsProps {
   coinState: CoinState;
-  soundEnabled: boolean;
+  /** @deprecated sound is toggled from the header */
+  soundEnabled?: boolean;
   onFlip: () => void;
   onBatchFlip: (count: number) => void;
-  onToggleSound: () => void;
+  /** @deprecated sound is toggled from the header */
+  onToggleSound?: () => void;
   onReset: () => void;
   predictionSide: CoinSide | null;
   onSelectPrediction: (side: CoinSide | null) => void;
@@ -16,10 +18,8 @@ interface FlipControlsProps {
 
 export const FlipControls: React.FC<FlipControlsProps> = ({
   coinState,
-  soundEnabled,
   onFlip,
   onBatchFlip,
-  onToggleSound,
   onReset,
   predictionSide,
   onSelectPrediction,
@@ -40,99 +40,73 @@ export const FlipControls: React.FC<FlipControlsProps> = ({
     }
   };
 
+  const pill = (active: boolean, side: CoinSide) =>
+    `h-10 rounded-lg border px-4 text-sm font-medium transition-colors disabled:opacity-50 ${
+      active
+        ? side === 'heads'
+          ? 'border-heads-500 bg-heads-400 text-zinc-950'
+          : 'border-tails-600 bg-tails-600 text-white'
+        : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800'
+    }`;
+
   return (
-    <div className="w-full max-w-xl mx-auto flex flex-col items-center gap-5">
-      {/* Prediction Mode Selector */}
+    <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-6">
       {isPredictionMode && (
-        <div className="w-full bg-indigo-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-indigo-200 dark:border-indigo-900/50 flex flex-col items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-indigo-700 dark:text-indigo-400">
-            Predict Before Flipping
-          </span>
-          <div className="flex gap-3">
+        <div className="flex w-full flex-col items-center gap-2" role="group" aria-label="Predict the result">
+          <span className="text-sm text-zinc-500 dark:text-zinc-400">Want to call it first?</span>
+          <div className="flex gap-2">
             <button
               type="button"
               disabled={isFlipping}
+              aria-pressed={predictionSide === 'heads'}
               onClick={() => onSelectPrediction(predictionSide === 'heads' ? null : 'heads')}
-              className={`px-5 py-2 rounded-xl font-bold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-400 ${
-                predictionSide === 'heads'
-                  ? 'bg-amber-500 text-white shadow-md scale-105 ring-2 ring-amber-300'
-                  : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 hover:bg-amber-50 dark:hover:bg-slate-600'
-              }`}
+              className={pill(predictionSide === 'heads', 'heads')}
             >
-              👑 Predict Heads
+              I say heads
             </button>
             <button
               type="button"
               disabled={isFlipping}
+              aria-pressed={predictionSide === 'tails'}
               onClick={() => onSelectPrediction(predictionSide === 'tails' ? null : 'tails')}
-              className={`px-5 py-2 rounded-xl font-bold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
-                predictionSide === 'tails'
-                  ? 'bg-indigo-600 text-white shadow-md scale-105 ring-2 ring-indigo-300'
-                  : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 hover:bg-indigo-50 dark:hover:bg-slate-600'
-              }`}
+              className={pill(predictionSide === 'tails', 'tails')}
             >
-              🌟 Predict Tails
+              I say tails
             </button>
           </div>
           {predictionSide && (
-            <span className="text-xs text-slate-500 dark:text-slate-400">
-              Prediction locked! Flip now to see if you win.
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              You picked {predictionSide}. Now flip to find out.
             </span>
           )}
         </div>
       )}
 
-      {/* Main Large Flip Button */}
-      <div className="w-full flex items-center justify-center gap-3">
+      <div className="flex w-full items-center justify-center gap-2">
         <button
           type="button"
           disabled={isFlipping}
           onClick={onFlip}
-          className={`flex-1 max-w-sm py-4 px-8 rounded-2xl font-black text-xl tracking-wider text-white shadow-xl transition-all duration-150 transform active:scale-95 flex items-center justify-center gap-3 min-h-[56px] focus:outline-none focus:ring-4 focus:ring-amber-400/50 ${
-            isFlipping
-              ? 'bg-slate-400 dark:bg-slate-600 cursor-not-allowed shadow-none opacity-80'
-              : 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-400 hover:to-amber-600 shadow-amber-500/25 hover:shadow-amber-500/40'
-          }`}
-          aria-label={isFlipping ? 'Flipping coin...' : 'Flip coin'}
+          className="flex h-14 max-w-sm flex-1 items-center justify-center gap-2 rounded-xl bg-heads-400 px-8 text-lg font-semibold text-zinc-950 shadow-card transition-colors hover:bg-heads-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-tails-500 focus-visible:ring-offset-2 active:scale-[0.98] disabled:bg-zinc-200 disabled:text-zinc-500 dark:disabled:bg-zinc-800"
         >
-          <Sparkles className={`w-6 h-6 ${isFlipping ? 'animate-spin' : ''}`} />
-          <span>{isFlipping ? 'FLIPPING...' : 'FLIP COIN'}</span>
+          {isFlipping ? 'Flipping…' : 'Flip the coin'}
         </button>
-
-        {/* Quick Sound Toggle */}
-        <button
-          type="button"
-          onClick={onToggleSound}
-          className="p-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 min-h-[56px] min-w-[56px] flex items-center justify-center"
-          title={soundEnabled ? 'Mute sound effects' : 'Unmute sound effects'}
-          aria-label={soundEnabled ? 'Sound is on, click to mute' : 'Sound is muted, click to unmute'}
-        >
-          {soundEnabled ? <Volume2 className="w-5 h-5 text-amber-600 dark:text-amber-400" /> : <VolumeX className="w-5 h-5 opacity-60" />}
-        </button>
-
-        {/* Reset Button */}
         <button
           type="button"
           disabled={isFlipping}
           onClick={() => {
-            if (window.confirm('Reset current flip counter and streaks?')) {
-              onReset();
-            }
+            if (window.confirm('Reset your flip count and streaks? This can’t be undone.')) onReset();
           }}
-          className="p-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 min-h-[56px] min-w-[56px] flex items-center justify-center"
-          title="Reset stats & counter (R)"
-          aria-label="Reset statistics and counter"
+          className="flex h-14 w-14 items-center justify-center rounded-xl border border-zinc-200 text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
+          title="Reset count and streaks"
+          aria-label="Reset count and streaks"
         >
-          <RotateCcw className="w-5 h-5" />
+          <RotateCcw className="h-5 w-5" />
         </button>
       </div>
 
-      {/* Multiple Quick Batch Presets */}
-      <div className="w-full flex flex-col items-center gap-2">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-          <Play className="w-3.5 h-3.5" />
-          <span>Batch Experiments</span>
-        </div>
+      <div className="flex w-full flex-col items-center gap-2">
+        <span className="text-sm text-zinc-500 dark:text-zinc-400">Or flip lots at once</span>
         <div className="flex flex-wrap items-center justify-center gap-2">
           {presets.map((count) => (
             <button
@@ -140,32 +114,29 @@ export const FlipControls: React.FC<FlipControlsProps> = ({
               type="button"
               disabled={isFlipping}
               onClick={() => onBatchFlip(count)}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:bg-amber-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-sm"
+              className="h-8 rounded-lg border border-zinc-200 bg-white px-3 text-sm tabular-nums text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
             >
-              +{count.toLocaleString()}
+              {count.toLocaleString()}
             </button>
           ))}
           <button
             type="button"
             disabled={isFlipping}
             onClick={() => setShowCustomModal(true)}
-            className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/60 transition-all focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-sm"
+            className="h-8 rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
           >
-            Custom...
+            Other…
           </button>
         </div>
       </div>
 
-      {/* Custom Batch Modal */}
       {showCustomModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-700">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-              Custom Batch Experiment
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/50 p-4" role="dialog" aria-modal="true" aria-labelledby="custom-flips-title">
+          <div className="card w-full max-w-sm p-6 shadow-pop">
+            <h3 id="custom-flips-title" className="text-lg font-semibold">
+              How many flips?
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-              Enter number of flips to run instantly (1 to 1,000,000):
-            </p>
+            <p className="mb-4 mt-1 text-sm text-zinc-500 dark:text-zinc-400">Any number from 1 to 1,000,000.</p>
             <form onSubmit={handleCustomSubmit} className="flex flex-col gap-4">
               <input
                 type="number"
@@ -173,22 +144,19 @@ export const FlipControls: React.FC<FlipControlsProps> = ({
                 max="1000000"
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white font-mono text-base focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="h-11 w-full rounded-lg border border-zinc-300 bg-white px-3 font-mono text-base dark:border-zinc-700 dark:bg-zinc-950"
                 autoFocus
               />
-              <div className="flex gap-2 justify-end">
+              <div className="flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowCustomModal(false)}
-                  className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  className="h-10 rounded-lg px-4 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl text-sm font-bold bg-amber-500 hover:bg-amber-600 text-white shadow-md transition-all"
-                >
-                  Run Experiment
+                <button type="submit" className="h-10 rounded-lg bg-heads-400 px-4 text-sm font-medium text-zinc-950 hover:bg-heads-300">
+                  Flip them
                 </button>
               </div>
             </form>

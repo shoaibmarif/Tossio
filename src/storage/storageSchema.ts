@@ -4,7 +4,7 @@ import { INITIAL_OVERALL_STATS } from '../game/statistics';
 export const DEFAULT_APP_STORAGE: AppStorageV1 = {
   version: 'coinflip:v1',
   settings: {
-    theme: 'system',
+    theme: 'light',
     soundEnabled: true,
     hapticsEnabled: true,
     animationMode: 'on',

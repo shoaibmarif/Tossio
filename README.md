@@ -1,131 +1,114 @@
-# coinfliptool — Production-Ready Coin Flip Game & Probability Tool
+# Tossio
 
-A high-performance, accessible, privacy-first virtual coin flipper and interactive probability laboratory built with **React 19**, **TypeScript**, **Tailwind CSS**, and **Vite**.
+A free online coin flip. Heads or tails in one tap, plus a few extras for the curious.
 
-Created by **Shoaib Arif**:
-- 🌐 **Portfolio**: [https://shoaibarif.vercel.app/](https://shoaibarif.vercel.app/)
-- 💻 **GitHub**: [https://github.com/shoaibmarif](https://github.com/shoaibmarif)
-- 💼 **LinkedIn**: [https://www.linkedin.com/in/shoaibmarif/](https://www.linkedin.com/in/shoaibmarif/)
+Try it at **[tossio.vercel.app](https://tossio.vercel.app)**
 
-Designed as a frontend-only application with zero backend or database requirements, certified cryptographically secure randomness, installable PWA support, and ready for instant deployment to Netlify or any static host.
+![Tossio: Heads or tails?](public/og-image.png)
 
----
+## About
 
-## 🌟 Key Features
+Sometimes you just need a coin and you don't have one in your pocket. Tossio is a quick, fair one
+that works on any phone or computer. It's free, there are no ads and you don't need an account.
 
-### 1. Core Coin Flipping Experience
-- **CSPRNG Randomness**: Uses the browser's hardware-backed Web Cryptography API (`crypto.getRandomValues()`) for authentic, unmanipulated 50/50 probability.
-- **Realistic 3D Physics Animation**: Lifelike lift, horizontal spinning revolutions, and settle bounce with dynamic contact shadows.
-- **Original Coin Designs**: Original metallic artwork (Classic Gold, Royal Silver, Antique Bronze, Cyber Neon) with detailed rim ridges and beaded relief rings—no copyrighted or real currency imagery.
-- **Animation Presets & Reduced Motion**: Fast (400ms), Normal (750ms), Slow (1200ms), and custom Reduced-Motion mode respecting `prefers-reduced-motion`.
-- **Strict State Management**: Eliminates double-clicks, duplicate updates, or animation overlap bugs during flips.
+Around the coin there's some extra fun: a daily challenge, a prediction game, a decision maker,
+and a simulator that flips a million coins at once, along with short guides to the maths and
+physics of coin tosses.
 
-### 2. High-Performance Batch Simulations (up to 1,000,000 Flips)
-- **Instant Monte Carlo Experiments**: Run batches of 100, 1,000, 10,000, or up to 1,000,000 flips in milliseconds using bitwise population-count operations.
-- **Empirical Visualizations**: Interactive SVG donut charts, distribution bars, and deviation calculations from the theoretical 50.0% benchmark.
-- **Saved Experiment History**: Saves the last 100 experiments locally with detailed views, deletion, and highlight badges for the **Closest to 50/50** and **Largest Sample Deviation**.
-- **Social Sharing**: One-click sharing via the Web Share API (`navigator.share()`) with automated clipboard fallback.
+## Features
 
-### 3. Probability Learning Lab
-- **Interactive Convergence Lab**: Watch the Law of Large Numbers in action as empirical Heads % converges toward the theoretical 50% line across sample sizes from 1 to 50,000 flips.
-- **Educational Guides**: Explanations of trial independence, Gambler's Fallacy, sample variance, and margin of error formulas.
-- **Physical Coin Fairness Tester ("Is My Coin Fair?")**: Descriptive analysis tool for evaluating physical coin flip trial data.
+- **Flip a coin.** A 3D coin with sound, your flip history, running totals and streaks. Tap the
+  coin or press Space.
+- **Decision flip.** Type two options and let the coin choose.
+- **Daily challenge.** The same goal for everyone each day, plus a prediction game: call heads
+  or tails before you flip and build a streak.
+- **Simulator.** Flip from 100 to 1,000,000 coins in one go and see how close you get to 50/50.
+  There's also a deliberately unfair "weighted coin" to experiment with, and your last 100 runs
+  are saved.
+- **Design your coin.** Change the finish, the symbols and the labels.
+- **Statistics and achievements.** Totals, longest streaks, your best simulations and 14
+  achievements.
+- **Guides.** Coin flip probability (with a live demo of the law of large numbers and a table of
+  streak odds) and how coin flipping works, from real coins to random numbers.
+- **Works offline** once it has loaded, and can be added to your home screen.
+- **Light and dark mode.**
 
-### 4. Interactive Tools & Mini-Games
-- **Decision Coin Flip**: Enter Option A vs Option B to break analysis paralysis with an unbiased, private coin flip.
-- **Deterministic Daily Challenge**: Generates a synchronized challenge for every player globally using the current date string (`YYYY-MM-DD`).
-- **Prediction Game Mode**: Guess Heads or Tails before flipping to test intuition, build correct streaks, and earn combo score bonuses (+2 for 3 streak, +5 for 5 streak, +10 for 10 streak).
-- **Custom Coin Studio**: Customize coin labels (e.g. YES / NO), symbols (e.g. ☀️ / 🌙), and metallic finishes with live 3D preview.
-- **Weighted Coin Simulation**: Configurable biased coin simulation (e.g., 70% Heads / 30% Tails) with a clear disclaimer separating it from fair mode.
+### How fair is it?
 
-### 5. Statistics, Streaks & Achievements
-- **Comprehensive Streak Engine**: Tracks current streaks, longest Heads streak, longest Tails streak, and longest overall streak.
-- **14 Local Achievements**: Milestones from "First Toss" to "Centurion", "Hot Streak", "Big Data", and "Seer".
-- **Zero-Telemetry Privacy**: All data is stored in the browser using versioned schema `coinflip:v1`. Nothing is sent to any server.
+Each flip uses the browser's cryptographic random number generator (`crypto.getRandomValues`),
+so heads and tails are exactly 50/50 and every flip is independent of the ones before. The
+animation is just for show: the result is decided the moment you flip.
 
-### 6. Audio, Accessibility & PWA
-- **Synthesized Web Audio API**: Procedural sound effects for coin flicks, spinning ticks, chime landing, and victory fanfares without external audio files.
-- **Accessible & Screen-Reader Ready**: ARIA live region (`role="status" aria-live="polite"`), high contrast, semantic HTML, and 56px+ touch targets.
-- **Keyboard Shortcuts**:
-  - <kbd>Space</kbd> / <kbd>Enter</kbd> — Flip Coin
-  - <kbd>R</kbd> — Reset Stats
-  - <kbd>H</kbd> — Predict Heads
-  - <kbd>T</kbd> — Predict Tails
-  - <kbd>Esc</kbd> — Dismiss Modals
-- **PWA & Offline Capable**: `manifest.webmanifest`, service worker (`sw.js`), and cache-first offline support.
+Everything you do is stored in your browser's `localStorage`. Nothing is sent to a server.
 
----
+## Run it locally
 
-## 🛠️ Technology Stack
-
-- **Framework**: React 19 (`react`, `react-dom`)
-- **Language**: TypeScript (`tsc -b`)
-- **Styling**: Tailwind CSS & PostCSS
-- **Routing**: React Router DOM 7
-- **Icons**: Lucide React
-- **Testing**: Vitest (`vitest run` with Happy-DOM)
-- **Bundler**: Vite 6
-
----
-
-## 🚀 Getting Started
-
-### Installation
+You need [Node.js](https://nodejs.org/) 18 or newer (20+ recommended).
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/coin-flip.git
-cd coin-flip
-
-# Install dependencies
+git clone https://github.com/shoaibmarif/tossio.git
+cd tossio
 npm install
-```
-
-### Development Server
-
-```bash
 npm run dev
 ```
 
-Open `http://localhost:5173` in your browser.
+Then open <http://localhost:5173>.
 
-### Running Unit Tests
+### Scripts
 
-```bash
-npm test
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the development server with hot reload |
+| `npm run build` | Type-check and build the production site into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm test` | Run the tests (Vitest) |
+
+The production build also writes a separate HTML file for every page, each with its own title,
+description and social-preview tags, plus `sitemap.xml`, `robots.txt` and `404.html`.
+
+## Project structure
+
+```text
+src/
+  pages/            One component per page
+  components/       Coin, controls, stats, tools, layout and UI pieces
+  context/          App state: flips, streaks, experiments, achievements, settings
+  game/             Randomness, streaks, statistics, experiments, daily challenges, sounds
+  data/             FAQ content
+  seo/              Site config, per-page SEO metadata and structured data
+  storage/          localStorage persistence
+  __tests__/        Unit tests and a render test for every page
+scripts/seoPlugin.ts  Build step that writes per-page HTML and the sitemap
+vercel.json           Hosting config: page routing, redirects, caching headers
 ```
 
-Runs 27 automated unit tests covering cryptographic random bits, streak detection, consistent percentage rounding, batch experiments, daily challenge determinism, and storage migrations.
+Good places to start:
 
-### Production Build
+- **Name, domain and links:** `src/seo/site.ts`
+- **Page titles and descriptions:** `src/seo/routes.ts`
+- **Randomness:** `src/game/random.ts`
+- **Daily challenges and achievements:** `src/game/challenges.ts`
 
-```bash
-npm run build
-```
+## Tech stack
 
-Compiles TypeScript and bundles static assets into `dist/`.
+React 19, TypeScript, Vite, Tailwind CSS, React Router and Vitest. Hosted on Vercel.
 
----
+## Deploying
 
-## 🌐 Netlify Deployment
+Import the repository into Vercel; it reads the build settings from `vercel.json`. If you deploy
+somewhere else or use a different domain, update `url` in `src/seo/site.ts`.
 
-The project includes `public/_redirects` configured for Single Page Application client-side routing (`/* /index.html 200`):
+## Contributing
 
-1. Link your Git repository on Netlify.
-2. Set Build Command: `npm run build`
-3. Set Publish Directory: `dist`
-4. Deploy! All routes (`/`, `/coin-flip-experiment`, `/coin-flip-statistics`, `/coin-flip-probability`, `/decision-coin-flip`, `/daily-coin-flip`, etc.) will route seamlessly.
+Bug reports and ideas are welcome. Please
+[open an issue](https://github.com/shoaibmarif/tossio/issues) first for anything big, and run
+`npm test` and `npm run build` before sending a pull request.
 
----
+## Author
 
-## 🔒 Privacy & Security
+Made by **Shoaib Arif**
 
-- **100% Client-Side**: No backend, no cookies, no third-party trackers.
-- **Web Crypto API**: Certified random bit generation via `crypto.getRandomValues()`.
-- **Local Storage**: User data remains strictly on the client device under key `coinflip:v1`.
-
----
-
-## 📄 License
-
-MIT License. Free for educational, commercial, and personal use.
+- Portfolio: [shoaibarif.vercel.app](https://shoaibarif.vercel.app/)
+- LinkedIn: [linkedin.com/in/shoaibmarif](https://www.linkedin.com/in/shoaibmarif/)
+- GitHub: [@shoaibmarif](https://github.com/shoaibmarif)
+- Email: [shoaibmuhammadarif@gmail.com](mailto:shoaibmuhammadarif@gmail.com)

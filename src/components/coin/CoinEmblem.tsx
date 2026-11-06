@@ -62,7 +62,7 @@ export const CoinEmblem: React.FC<CoinEmblemProps> = ({ side, symbol, label, sty
   }[style];
 
   return (
-    <div className="w-full h-full rounded-full relative select-none shadow-2xl flex items-center justify-center overflow-hidden">
+    <div className="w-full h-full rounded-full relative select-none shadow-sm flex items-center justify-center overflow-hidden">
       <svg
         viewBox="0 0 200 200"
         className="w-full h-full filter drop-shadow-sm"

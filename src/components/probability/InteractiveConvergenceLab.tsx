@@ -87,18 +87,18 @@ export const InteractiveConvergenceLab: React.FC = () => {
   }, [dataPoints, graphWidth, graphHeight]);
 
   return (
-    <div className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-700/60 pb-4">
+    <div className="bg-white dark:bg-zinc-800/90 rounded-2xl p-6 sm:p-8 border border-zinc-200 dark:border-zinc-700 shadow-sm space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 dark:border-zinc-700/60 pb-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-            Interactive Probability Lab
+          <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
+            Try it
           </span>
-          <h3 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+          <h3 className="text-xl font-semibold text-zinc-900 dark:text-white flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-amber-500" />
-            Convergence & The Law of Large Numbers
+            Watch it even out
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Select a sample size and observe how Heads % converges toward the theoretical 50% line.
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+            Pick a number of flips and watch the share of heads drift towards 50%.
           </p>
         </div>
 
@@ -110,10 +110,10 @@ export const InteractiveConvergenceLab: React.FC = () => {
               type="button"
               disabled={isRunning}
               onClick={() => runConvergenceSimulation(count)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-amber-400 ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-amber-400 ${
                 targetFlips === count && dataPoints.length > 0
                   ? 'bg-amber-500 text-white shadow-md'
-                  : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-600'
+                  : 'bg-zinc-100 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-amber-100 dark:hover:bg-zinc-600'
               }`}
             >
               {count.toLocaleString()}
@@ -123,7 +123,7 @@ export const InteractiveConvergenceLab: React.FC = () => {
       </div>
 
       {/* Dynamic Convergence Chart */}
-      <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center">
+      <div className="bg-zinc-50 dark:bg-zinc-900/60 p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800 flex flex-col items-center">
         {dataPoints.length > 0 ? (
           <div className="w-full overflow-x-auto">
             <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-xl mx-auto h-auto">
@@ -148,7 +148,7 @@ export const InteractiveConvergenceLab: React.FC = () => {
                       y={y + 4}
                       textAnchor="end"
                       fontSize="10"
-                      className="fill-slate-400 font-mono"
+                      className="fill-zinc-400 font-mono"
                     >
                       {level}%
                     </text>
@@ -181,7 +181,7 @@ export const InteractiveConvergenceLab: React.FC = () => {
                           60)
                   }
                   r="5"
-                  className="fill-amber-500 stroke-white dark:stroke-slate-900"
+                  className="fill-amber-500 stroke-white dark:stroke-zinc-900"
                   strokeWidth="2"
                 />
               )}
@@ -191,7 +191,7 @@ export const InteractiveConvergenceLab: React.FC = () => {
                 x={padding.left}
                 y={height - 8}
                 fontSize="10"
-                className="fill-slate-400 font-mono"
+                className="fill-zinc-400 font-mono"
               >
                 Flip #1
               </text>
@@ -200,25 +200,25 @@ export const InteractiveConvergenceLab: React.FC = () => {
                 y={height - 8}
                 textAnchor="end"
                 fontSize="10"
-                className="fill-slate-400 font-mono"
+                className="fill-zinc-400 font-mono"
               >
                 Flip #{targetFlips.toLocaleString()}
               </text>
             </svg>
           </div>
         ) : (
-          <div className="py-12 text-center text-slate-400 dark:text-slate-500">
+          <div className="py-12 text-center text-zinc-400 dark:text-zinc-500">
             <Play className="w-8 h-8 mx-auto mb-2 opacity-50" />
-            <p className="text-sm font-semibold">Click any sample size above to launch the simulation</p>
+            <p className="text-sm font-semibold">Pick a number of flips above to start</p>
           </div>
         )}
 
         {finalResult && (
-          <div className="w-full mt-3 pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-            <span className="text-slate-600 dark:text-slate-400">
+          <div className="w-full mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span className="text-zinc-600 dark:text-zinc-400">
               Final result after <strong>{finalResult.total.toLocaleString()}</strong> flips:
             </span>
-            <div className="flex gap-4 font-mono font-bold">
+            <div className="flex gap-4 font-mono font-semibold">
               <span className="text-amber-600 dark:text-amber-400">
                 Heads: {finalResult.heads.toLocaleString()} ({(finalResult.heads / finalResult.total * 100).toFixed(2)}%)
               </span>
@@ -231,30 +231,30 @@ export const InteractiveConvergenceLab: React.FC = () => {
       </div>
 
       {/* Educational Explanations */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
-        <div className="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2">
-          <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <div className="p-4 bg-zinc-50 dark:bg-zinc-900/40 rounded-2xl border border-zinc-100 dark:border-zinc-800 space-y-2">
+          <div className="font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5 text-sm">
             <Info className="w-4 h-4 text-amber-500" />
-            Expected vs Observed Frequency
+            Expected vs what you get
           </div>
           <p>
-            <strong>Expected Probability:</strong> For a fair symmetrical coin, each side has an exact theoretical probability of \(P = 0.5\) (50%).
+            <strong>Expected Probability:</strong> On a fair coin, each side has a probability of exactly 0.5, or 50%.
           </p>
           <p>
-            <strong>Observed Frequency:</strong> In any small trial (e.g. 10 flips), getting 7 Heads and 3 Tails is completely normal. Randomness doesn&apos;t alternate predictably; variance occurs naturally in small samples.
+            <strong>Observed Frequency:</strong> In a short run, like 10 flips, getting 7 heads and 3 tails is completely normal. Random doesn’t mean neatly alternating.
           </p>
         </div>
 
-        <div className="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2">
-          <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-sm">
+        <div className="p-4 bg-zinc-50 dark:bg-zinc-900/40 rounded-2xl border border-zinc-100 dark:border-zinc-800 space-y-2">
+          <div className="font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5 text-sm">
             <TrendingUp className="w-4 h-4 text-emerald-500" />
-            The Law of Large Numbers
+            The law of large numbers
           </div>
           <p>
-            As the number of independent flips grows into thousands and tens of thousands, the relative frequency of Heads inevitably stabilizes and converges toward 50%.
+            Once you’re into thousands of flips, the share of heads settles very close to 50%.
           </p>
           <p>
-            <strong>Independence:</strong> A coin possesses no memory. Even after 5 Heads in a row, the exact probability of Heads on the 6th flip remains exactly 50%.
+            <strong>Independence:</strong> A coin has no memory. Even after five heads in a row, the next flip is still 50/50.
           </p>
         </div>
       </div>

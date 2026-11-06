@@ -18,12 +18,12 @@ export const CoinResult: React.FC<CoinResultProps> = ({
 
   if (!latestResult && flipNumber === 0) {
     return (
-      <div className="w-full max-w-md mx-auto text-center py-4 px-6 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
-        <p className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-          Your coin is ready
+      <div className="w-full max-w-md mx-auto text-center py-4 px-6 bg-zinc-50 dark:bg-zinc-800/60 rounded-2xl border border-zinc-200 dark:border-zinc-700/60 shadow-sm">
+        <p className="text-lg font-semibold text-zinc-800 dark:text-zinc-100">
+          Ready when you are
         </p>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Tap the coin or press <kbd className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-xs font-mono">Space</kbd> / <kbd className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-xs font-mono">Enter</kbd> to flip.
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          Tap the coin or press <kbd className="px-1.5 py-0.5 bg-zinc-200 dark:bg-zinc-700 rounded text-xs font-mono">Space</kbd> / <kbd className="px-1.5 py-0.5 bg-zinc-200 dark:bg-zinc-700 rounded text-xs font-mono">Enter</kbd> to flip.
         </p>
       </div>
     );
@@ -42,7 +42,7 @@ export const CoinResult: React.FC<CoinResultProps> = ({
 
   return (
     <div
-      className={`w-full max-w-md mx-auto text-center py-4 px-6 bg-white dark:bg-slate-800/90 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-md transition-all duration-300 ${
+      className={`w-full max-w-md mx-auto text-center py-4 px-6 bg-white dark:bg-zinc-800/90 rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-md transition-all duration-300 ${
         isFlipping ? 'opacity-50 scale-95' : 'opacity-100 scale-100'
       }`}
       role="region"
@@ -50,13 +50,13 @@ export const CoinResult: React.FC<CoinResultProps> = ({
     >
       <div className="flex items-center justify-center gap-3">
         <span
-          className={`text-2xl sm:text-3xl font-black tracking-wider uppercase transition-transform ${resultColor}`}
+          className={`text-2xl sm:text-3xl font-semibold tracking-wider uppercase transition-transform ${resultColor}`}
         >
           {isFlipping ? 'Flipping...' : resultLabel}
         </span>
         {!isFlipping && (
           <span
-            className={`text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${badgeBg}`}
+            className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${badgeBg}`}
           >
             Flip #{flipNumber}
           </span>

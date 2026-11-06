@@ -16,6 +16,7 @@ import { runBatchExperiment, type RunBatchOptions } from '../game/experiments';
 import {
   getTodayDateString,
   generateDailyChallenge,
+  advanceDailyChallenge,
   evaluateAchievements,
   ACHIEVEMENTS_LIST,
 } from '../game/challenges';
@@ -212,30 +213,9 @@ export const CoinFlipProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       // Daily Challenge progress
       const today = getTodayDateString();
       const currentChallenge = prevData.dailyChallengeProgress[today] || generateDailyChallenge(today);
-      let updatedChallenge = { ...currentChallenge };
-
-      if (!updatedChallenge.isCompleted) {
-        let isDone = false;
-        if (updatedChallenge.challengeType === 'streak') {
-          updatedChallenge.streakRecord = Math.max(
-            updatedChallenge.streakRecord,
-            newStreak.currentStreak
-          );
-          if (updatedChallenge.streakRecord >= updatedChallenge.targetFlips) {
-            isDone = true;
-          }
-        } else {
-          updatedChallenge.progress += 1;
-          if (updatedChallenge.progress >= updatedChallenge.targetFlips) {
-            isDone = true;
-          }
-        }
-
-        if (isDone) {
-          updatedChallenge.isCompleted = true;
-          updatedChallenge.completedAt = Date.now();
-          soundFx.playAchievementFanfare();
-        }
+      const updatedChallenge = advanceDailyChallenge(currentChallenge, outcome);
+      if (updatedChallenge.isCompleted && !currentChallenge.isCompleted) {
+        soundFx.playAchievementFanfare();
       }
 
       // History record
@@ -319,36 +299,32 @@ export const CoinFlipProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const runExperiment = useCallback(
     (options: RunBatchOptions): BatchExperimentRecord => {
       const exp = runBatchExperiment(options);
-
-      setData((prev) => {
-        const nextExperiments = [exp, ...prev.experiments].slice(0, 100);
-
-        // Check if experiment unlocked achievements
-        const newlyUnlocked = evaluateAchievements({
-          unlockedMap: prev.achievements,
-          overallStats: prev.overallStats,
-          experiments: nextExperiments,
-          predictionStats: prev.predictionStats,
-        });
-
-        const nextAchievements = { ...prev.achievements };
-        if (newlyUnlocked.length > 0) {
-          newlyUnlocked.forEach((id) => {
-            nextAchievements[id] = Date.now();
-          });
-          const firstAch = ACHIEVEMENTS_LIST.find((a) => a.id === newlyUnlocked[0]);
-          if (firstAch) {
-            setNewAchievementUnlocked(firstAch.title);
-            soundFx.playAchievementFanfare();
-          }
-        }
-
-        return {
-          ...prev,
-          experiments: nextExperiments,
-          achievements: nextAchievements,
-        };
+      const prev = dataRef.current;
+      const nextExperiments = [exp, ...prev.experiments].slice(0, 100);
+      const newlyUnlocked = evaluateAchievements({
+        unlockedMap: prev.achievements,
+        overallStats: prev.overallStats,
+        experiments: nextExperiments,
+        predictionStats: prev.predictionStats,
       });
+      const now = Date.now();
+
+      // Pure state update; sounds and toasts happen outside it.
+      setData((cur) => {
+        const achievements = { ...cur.achievements };
+        newlyUnlocked.forEach((id) => {
+          if (!achievements[id]) achievements[id] = now;
+        });
+        return { ...cur, experiments: [exp, ...cur.experiments].slice(0, 100), achievements };
+      });
+
+      if (newlyUnlocked.length > 0) {
+        const firstAch = ACHIEVEMENTS_LIST.find((a) => a.id === newlyUnlocked[0]);
+        if (firstAch) {
+          setNewAchievementUnlocked(firstAch.title);
+          soundFx.playAchievementFanfare();
+        }
+      }
 
       soundFx.playSuccessFanfare();
       return exp;

@@ -1,4 +1,5 @@
 import type {
+  CoinSide,
   DailyChallengeState,
   Achievement,
   OverallStats,
@@ -44,22 +45,22 @@ export function generateDailyChallenge(dateString: string): DailyChallengeState 
     {
       type: 'balance',
       target: 50,
-      goalText: 'Flip 50 times and observe your 50/50 balance.',
+      goalText: 'Flip 50 times today and see how close you get to half and half.',
     },
     {
       type: 'streak',
       target: 5,
-      goalText: 'Achieve a streak of at least 5 in a row today.',
+      goalText: 'Get the same side 5 times in a row today.',
     },
     {
       type: 'flips',
       target: 100,
-      goalText: 'Complete 100 total flips today to test the Law of Large Numbers.',
+      goalText: 'Flip 100 times today. Does it even out?',
     },
     {
       type: 'speed',
       target: 25,
-      goalText: 'Perform 25 quick consecutive flips today.',
+      goalText: 'Flip 25 times today.',
     },
   ];
 
@@ -77,104 +78,128 @@ export function generateDailyChallenge(dateString: string): DailyChallengeState 
 }
 
 /**
+ * Applies one flip to a daily challenge and returns the updated challenge.
+ * The streak challenge only counts runs made today, so a streak carried over
+ * from yesterday can't complete today's challenge.
+ */
+export function advanceDailyChallenge(challenge: DailyChallengeState, outcome: CoinSide): DailyChallengeState {
+  if (challenge.isCompleted) return challenge;
+  const next: DailyChallengeState = { ...challenge };
+
+  if (next.challengeType === 'streak') {
+    next.runLength = next.runSide === outcome ? (next.runLength ?? 0) + 1 : 1;
+    next.runSide = outcome;
+    next.streakRecord = Math.max(next.streakRecord, next.runLength);
+    next.progress = next.streakRecord;
+    if (next.streakRecord >= next.targetFlips) next.isCompleted = true;
+  } else {
+    next.progress += 1;
+    if (next.progress >= next.targetFlips) next.isCompleted = true;
+  }
+
+  if (next.isCompleted) next.completedAt = Date.now();
+  return next;
+}
+
+/**
  * All Application Achievements
  */
 export const ACHIEVEMENTS_LIST: Achievement[] = [
   {
     id: 'first_flip',
     title: 'First Toss',
-    description: 'Flip your very first coin.',
+    description: 'Flip your first coin.',
     icon: '🪙',
     unlockedAt: null,
   },
   {
     id: 'flips_10',
     title: 'Getting Started',
-    description: 'Complete 10 total flips.',
+    description: 'Flip 10 times.',
     icon: '✨',
     unlockedAt: null,
   },
   {
     id: 'flips_100',
     title: 'Centurion',
-    description: 'Complete 100 total flips.',
+    description: 'Flip 100 times.',
     icon: '💯',
     unlockedAt: null,
   },
   {
     id: 'flips_1000',
-    title: 'Probability Enthusiast',
-    description: 'Reach 1,000 total flips.',
+    title: 'Committed',
+    description: 'Flip 1,000 times.',
     icon: '⚡',
     unlockedAt: null,
   },
   {
     id: 'flips_10000',
-    title: 'Grand Statistician',
-    description: 'Achieve 10,000 flips across your journey.',
+    title: 'Ten thousand',
+    description: 'Flip 10,000 times. Really?',
     icon: '🏛️',
     unlockedAt: null,
   },
   {
     id: 'heads_100',
-    title: 'Heads Master',
-    description: 'Accumulate 100 Heads results.',
+    title: 'Heads fan',
+    description: 'Land on heads 100 times.',
     icon: '👑',
     unlockedAt: null,
   },
   {
     id: 'tails_100',
-    title: 'Tails Master',
-    description: 'Accumulate 100 Tails results.',
+    title: 'Tails fan',
+    description: 'Land on tails 100 times.',
     icon: '🌟',
     unlockedAt: null,
   },
   {
     id: 'streak_5',
     title: 'Hot Streak',
-    description: 'Hit a streak of 5 on either side.',
+    description: 'Get the same side 5 times in a row.',
     icon: '🔥',
     unlockedAt: null,
   },
   {
     id: 'streak_10',
     title: 'Against the Odds',
-    description: 'Hit a streak of 10 in a row (1 in 1,024 chance!).',
+    description: 'Get the same side 10 times in a row. About a 1 in 500 chance from any given flip.',
     icon: '🚀',
     unlockedAt: null,
   },
   {
     id: 'experiment_100',
-    title: 'Lab Researcher',
-    description: 'Run a batch experiment of at least 100 flips.',
+    title: 'Curious',
+    description: 'Run a simulation of 100 flips or more.',
     icon: '🔬',
     unlockedAt: null,
   },
   {
     id: 'experiment_1000',
     title: 'Big Data',
-    description: 'Run a batch experiment of 1,000 or more flips.',
+    description: 'Run a simulation of 1,000 flips or more.',
     icon: '📊',
     unlockedAt: null,
   },
   {
     id: 'daily_champion',
-    title: 'Daily Challenger',
-    description: 'Complete a Daily Challenge.',
+    title: 'Daily player',
+    description: 'Finish a daily challenge.',
     icon: '📅',
     unlockedAt: null,
   },
   {
     id: 'prediction_first',
-    title: 'Mind Reader',
-    description: 'Make your first correct prediction.',
+    title: 'Lucky guess',
+    description: 'Call a flip correctly.',
     icon: '🔮',
     unlockedAt: null,
   },
   {
     id: 'prediction_10',
-    title: 'Seer',
-    description: 'Make 10 correct predictions in Prediction Mode.',
+    title: 'On a roll',
+    description: 'Call 10 flips correctly.',
     icon: '🎯',
     unlockedAt: null,
   },

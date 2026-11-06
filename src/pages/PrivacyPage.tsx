@@ -1,73 +1,57 @@
 import React from 'react';
-import { SEOHead } from '../components/seo/SEOHead';
-import { ShieldCheck, HardDrive, EyeOff } from 'lucide-react';
+import { SeoMeta } from '../components/seo/SeoMeta';
+import { PageHeader } from '../components/layout/PageHeader';
+import { SITE } from '../seo/site';
 
-export const PrivacyPage: React.FC = () => {
-  return (
-    <>
-      <SEOHead
-        title="Privacy Policy – Client-Side Privacy Commitment"
-        description="Learn about our privacy commitment: CoinFlip.io operates 100% in your browser. No personal data, decisions, or flip history are ever transmitted to a server."
-        canonicalPath="/privacy"
-      />
+export const PrivacyPage: React.FC = () => (
+  <div className="mx-auto max-w-3xl">
+    <SeoMeta canonicalPath="/privacy" />
+    <PageHeader title="Privacy policy" intro="Last updated 6 November 2026." />
 
-      <div className="space-y-10 max-w-3xl mx-auto">
-        <div className="text-center space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-            Privacy First
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white flex items-center justify-center gap-2.5">
-            <ShieldCheck className="w-8 h-8 text-emerald-500" />
-            Privacy Policy
-          </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto">
-            Your data is yours alone. CoinFlip.io is engineered as a zero-telemetry, pure frontend utility.
-          </p>
-        </div>
+    <article className="prose-page">
+      <p>
+        {SITE.name} is a coin flip that runs in your browser. There are no accounts and no game server, so
+        there’s very little to tell. Here is all of it.
+      </p>
 
-        <div className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-          <div className="space-y-2">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <HardDrive className="w-5 h-5 text-amber-500" />
-              1. Local Browser Storage Only
-            </h2>
-            <p>
-              All application state—including your total flips, Heads/Tails counts, streaks, batch experiments, achievements, custom decision choices, and visual theme preferences—is stored exclusively in your browser&apos;s local storage (<code>localStorage</code>).
-            </p>
-            <p>
-              This data never leaves your device and is never uploaded to any remote server or third-party database.
-            </p>
-          </div>
+      <h2>Nothing to sign up for</h2>
+      <p>You can use {SITE.name} without giving us your name, email address or anything else about you.</p>
 
-          <div className="space-y-2 pt-3">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <EyeOff className="w-5 h-5 text-indigo-500" />
-              2. Private Decisions
-            </h2>
-            <p>
-              When you use the Decision Coin Flip tool to decide between personal choices (e.g. Option A vs Option B), your inputs are kept in local memory only. We do not inspect, log, or track your decisions.
-            </p>
-          </div>
+      <h2>What stays on your device</h2>
+      <p>
+        Your flip history, statistics, streaks, achievements, saved experiments, decision options, coin design
+        and settings are stored in your browser’s <code>localStorage</code>. They never leave your device and
+        we can’t see them. You can delete them with the reset buttons on the statistics page, or by clearing
+        this site’s data in your browser.
+      </p>
 
-          <div className="space-y-2 pt-3">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-              3. Data Deletion
-            </h2>
-            <p>
-              You can wipe all stored data at any time by clearing your browser cache and cookies, or by clicking the &quot;Reset&quot; and &quot;Clear All&quot; buttons inside the application.
-            </p>
-          </div>
+      <h2>Analytics</h2>
+      <p>
+        We use Google Analytics to understand, in general terms, how many people visit and which pages they
+        use. Google Analytics uses cookies and collects details like the pages you view, your approximate
+        location, and your device and browser type. We don’t use it for advertising and we don’t sell data. You
+        can block it with a content blocker or Google’s{' '}
+        <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">
+          opt-out add-on
+        </a>
+        . See{' '}
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+          Google’s privacy policy
+        </a>{' '}
+        for more.
+      </p>
 
-          <div className="space-y-2 pt-3">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-              4. Offline Availability
-            </h2>
-            <p>
-              Because this website does not depend on an external API or remote backend, it can be cached via service workers to function completely offline without internet connectivity.
-            </p>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+      <h2>Hosting</h2>
+      <p>
+        The site is hosted on Vercel, which keeps standard server logs (such as IP addresses and the pages
+        requested) to run the service and protect it from abuse.
+      </p>
+
+      <h2>Questions</h2>
+      <p>
+        If you email me, I’ll only use your address to reply. Questions about this policy can go to{' '}
+        <a href={`mailto:${SITE.author.email}`}>{SITE.author.email}</a>.
+      </p>
+    </article>
+  </div>
+);
