@@ -27,7 +27,7 @@ export const PrivacyPage: React.FC = () => (
 
       <h2>Analytics</h2>
       <p>
-        We use Google Analytics to understand, in general terms, how many people visit and which pages they
+        We use Google Analytics and Google Tag Manager to understand, in general terms, how many people visit and which pages they
         use. Google Analytics uses cookies and collects details like the pages you view, your approximate
         location, and your device and browser type. We don’t use it for advertising and we don’t sell data. You
         can block it with a content blocker or Google’s{' '}
