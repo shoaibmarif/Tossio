@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { CoinState, CoinSide } from '../../types';
 import { RotateCcw } from 'lucide-react';
+import { Modal } from '../ui/Modal';
 
 interface FlipControlsProps {
   coinState: CoinState;
@@ -130,39 +131,32 @@ export const FlipControls: React.FC<FlipControlsProps> = ({
         </div>
       </div>
 
-      {showCustomModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/50 p-4" role="dialog" aria-modal="true" aria-labelledby="custom-flips-title">
-          <div className="card w-full max-w-sm p-6 shadow-pop">
-            <h3 id="custom-flips-title" className="text-lg font-semibold">
-              How many flips?
-            </h3>
-            <p className="mb-4 mt-1 text-sm text-zinc-500 dark:text-zinc-400">Any number from 1 to 1,000,000.</p>
-            <form onSubmit={handleCustomSubmit} className="flex flex-col gap-4">
-              <input
-                type="number"
-                min="1"
-                max="1000000"
-                value={customInput}
-                onChange={(e) => setCustomInput(e.target.value)}
-                className="h-11 w-full rounded-lg border border-zinc-300 bg-white px-3 font-mono text-base dark:border-zinc-700 dark:bg-zinc-950"
-                autoFocus
-              />
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCustomModal(false)}
-                  className="h-10 rounded-lg px-4 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="h-10 rounded-lg bg-heads-400 px-4 text-sm font-medium text-zinc-950 hover:bg-heads-300">
-                  Flip them
-                </button>
-              </div>
-            </form>
+      <Modal open={showCustomModal} onClose={() => setShowCustomModal(false)} title="How many flips?" subtitle="Any number from 1 to 1,000,000." maxWidth="sm">
+        <form onSubmit={handleCustomSubmit} className="flex flex-col gap-4">
+          <input
+            type="number"
+            min="1"
+            max="1000000"
+            value={customInput}
+            onChange={(e) => setCustomInput(e.target.value)}
+            aria-label="Number of flips"
+            className="h-11 w-full rounded-lg border border-zinc-300 bg-white px-3 font-mono text-base dark:border-zinc-700 dark:bg-zinc-950"
+            autoFocus
+          />
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setShowCustomModal(false)}
+              className="h-10 rounded-lg px-4 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            >
+              Cancel
+            </button>
+            <button type="submit" className="h-10 rounded-lg bg-heads-400 px-4 text-sm font-medium text-zinc-950 hover:bg-heads-300">
+              Flip them
+            </button>
           </div>
-        </div>
-      )}
+        </form>
+      </Modal>
     </div>
   );
 };

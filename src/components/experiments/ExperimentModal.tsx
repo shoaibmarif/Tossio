@@ -1,190 +1,126 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Share2, Check } from 'lucide-react';
 import type { BatchExperimentRecord } from '../../types';
 import { formatSignedDiff } from '../../game/statistics';
-import { X, Share2, Check } from 'lucide-react';
+import { Modal } from '../ui/Modal';
+import { SITE } from '../../seo/site';
 
 interface ExperimentModalProps {
   experiment: BatchExperimentRecord | null;
   onClose: () => void;
 }
 
-export const ExperimentModal: React.FC<ExperimentModalProps> = ({ experiment, onClose }) => {
-  const [copied, setCopied] = React.useState(false);
+const compact = (n: number) =>
+  n >= 1_000_000 ? `${(n / 1_000_000).toFixed(n % 1_000_000 ? 1 : 0)}M` : n >= 1000 ? `${(n / 1000).toFixed(n % 1000 ? 1 : 0)}k` : String(n);
 
+export const ExperimentModal: React.FC<ExperimentModalProps> = ({ experiment, onClose }) => {
+  const [copied, setCopied] = useState(false);
   if (!experiment) return null;
 
+  const e = experiment;
   const handleShare = async () => {
-    const textToShare = `🪙 Simulation results\nTotal Flips: ${experiment.totalFlips.toLocaleString()}\nHeads: ${experiment.heads.toLocaleString()} (${experiment.headsPercentage}%)\nTails: ${experiment.tails.toLocaleString()} (${experiment.tailsPercentage}%)\nDeviation from 50/50: Heads ${formatSignedDiff(experiment.headsDiff)}, Tails ${formatSignedDiff(experiment.tailsDiff)}\nLongest Streaks: Heads ${experiment.longestHeadsStreak}, Tails ${experiment.longestTailsStreak}`;
-
+    const text = [
+      `I flipped ${e.totalFlips.toLocaleString()} coins on ${SITE.name}:`,
+      `Heads ${e.heads.toLocaleString()} (${e.headsPercentage}%)`,
+      `Tails ${e.tails.toLocaleString()} (${e.tailsPercentage}%)`,
+      `Longest streak: ${Math.max(e.longestHeadsStreak, e.longestTailsStreak)} in a row`,
+    ].join('\n');
+    const url = `${SITE.url}/coin-flip-experiment`;
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: 'Coin Flip Experiment Results',
-          text: textToShare,
-        });
+        await navigator.share({ title: `${SITE.name} simulation`, text, url });
         return;
       } catch {
-        // Fallback to clipboard
+        // fall through to the clipboard
       }
     }
-
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(textToShare);
+    try {
+      await navigator.clipboard.writeText(`${text}\n${url}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard unavailable; nothing else to do
     }
   };
 
-  // Donut chart calculation
+  // Donut: heads arc drawn over a tails ring.
   const circumference = 2 * Math.PI * 40;
-  const headsOffset = (experiment.headsPercentage / 100) * circumference;
+  const headsArc = (e.headsPercentage / 100) * circumference;
 
   return (
-    <div
-      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 overflow-y-auto"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="experiment-modal-title"
+    <Modal
+      open
+      onClose={onClose}
+      title={`${e.totalFlips.toLocaleString()} flips`}
+      subtitle={`${e.isWeighted ? 'Weighted coin' : 'Fair coin'} · ${e.date}`}
     >
-      <div className="w-full max-w-lg bg-white dark:bg-zinc-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-zinc-200 dark:border-zinc-700 space-y-6 duration-200">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-700/60 pb-4">
-          <div>
-            <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
-              {experiment.isWeighted ? 'Weighted Simulation' : 'Batch Experiment'}
-            </span>
-            <h3 id="experiment-modal-title" className="text-xl font-semibold text-zinc-900 dark:text-white">
-              Experiment Results
-            </h3>
-            <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono">
-              {experiment.date}
-            </span>
-          </div>
+      {e.isWeighted && (
+        <p className="mb-4 rounded-lg border border-heads-200 bg-heads-50 px-3 py-2 text-sm text-heads-900 dark:border-heads-900 dark:bg-heads-950/40 dark:text-heads-100">
+          This coin was set to land heads {e.expectedHeadsPct}% of the time, so don’t expect 50/50.
+        </p>
+      )}
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-2 rounded-xl text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
-            aria-label="Close"
-          >
-            <X className="w-5 h-5" />
-          </button>
+      <div className="grid grid-cols-2 gap-3 text-center">
+        <div className="rounded-xl border border-heads-200 bg-heads-50 p-4 dark:border-heads-900/60 dark:bg-heads-950/30">
+          <span className="block text-sm text-heads-800 dark:text-heads-300">Heads</span>
+          <span className="block text-3xl font-semibold tabular-nums text-heads-700 dark:text-heads-300">{e.heads.toLocaleString()}</span>
+          <span className="block text-sm tabular-nums text-heads-800 dark:text-heads-300">{e.headsPercentage}%</span>
+          <span className="mt-1 block text-xs text-zinc-500 dark:text-zinc-400">{formatSignedDiff(e.headsDiff)} from expected</span>
         </div>
-
-        {/* Warning if weighted */}
-        {experiment.isWeighted && (
-          <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-2xl text-xs text-amber-800 dark:text-amber-200">
-            ⚠️ <strong>Simulation Notice:</strong> This is a custom weighted simulation (Expected: {experiment.expectedHeadsPct}% H / {experiment.expectedTailsPct}% T) and does not represent a fair 50/50 coin.
-          </div>
-        )}
-
-        {/* Main Overview Stat Boxes */}
-        <div className="grid grid-cols-2 gap-3 text-center">
-          <div className="p-4 bg-amber-50/70 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900/40 rounded-2xl">
-            <span className="block text-xs font-semibold text-amber-700 dark:text-amber-400">
-              Heads
-            </span>
-            <span className="text-3xl font-semibold text-amber-600 dark:text-amber-400">
-              {experiment.heads.toLocaleString()}
-            </span>
-            <div className="text-sm font-semibold text-amber-700/80 dark:text-amber-300 mt-1">
-              {experiment.headsPercentage}%
-            </div>
-            <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Diff: {formatSignedDiff(experiment.headsDiff)}
-            </div>
-          </div>
-
-          <div className="p-4 bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 rounded-2xl">
-            <span className="block text-xs font-semibold text-indigo-700 dark:text-indigo-400">
-              Tails
-            </span>
-            <span className="text-3xl font-semibold text-indigo-600 dark:text-indigo-400">
-              {experiment.tails.toLocaleString()}
-            </span>
-            <div className="text-sm font-semibold text-indigo-700/80 dark:text-indigo-300 mt-1">
-              {experiment.tailsPercentage}%
-            </div>
-            <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Diff: {formatSignedDiff(experiment.tailsDiff)}
-            </div>
-          </div>
-        </div>
-
-        {/* Visual Donut Chart and Streak breakdown */}
-        <div className="flex items-center justify-around p-4 bg-zinc-50 dark:bg-zinc-900/40 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-          {/* Accessible SVG Donut */}
-          <div className="relative w-28 h-28 flex items-center justify-center">
-            <svg className="w-full h-full -rotate-90 transform" viewBox="0 0 100 100" aria-hidden="true">
-              {/* Tails Background Circle */}
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="none"
-                stroke="#6366f1"
-                strokeWidth="12"
-              />
-              {/* Heads Overlay Circle */}
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="none"
-                stroke="#f59e0b"
-                strokeWidth="12"
-                strokeDasharray={`${headsOffset} ${circumference}`}
-                strokeLinecap="round"
-              />
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="text-xs font-semibold text-zinc-400">Flips</span>
-              <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-100">
-                {experiment.totalFlips >= 1000 ? `${(experiment.totalFlips / 1000).toFixed(1)}k` : experiment.totalFlips}
-              </span>
-            </div>
-          </div>
-
-          {/* Streaks breakdown */}
-          <div className="space-y-2 text-xs">
-            <div className="font-semibold text-zinc-700 dark:text-zinc-300">
-              Experimental Streaks:
-            </div>
-            <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-semibold">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-              Longest heads streak: <strong>{experiment.longestHeadsStreak}</strong>
-            </div>
-            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold">
-              <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
-              Longest tails streak: <strong>{experiment.longestTailsStreak}</strong>
-            </div>
-          </div>
-        </div>
-
-        {/* Textual Accessibility Summary */}
-        <div className="sr-only">
-          Experiment of {experiment.totalFlips} flips resulted in {experiment.heads} Heads ({experiment.headsPercentage}%), difference {formatSignedDiff(experiment.headsDiff)} from 50%. {experiment.tails} Tails ({experiment.tailsPercentage}%), difference {formatSignedDiff(experiment.tailsDiff)} from 50%. Longest Heads streak was {experiment.longestHeadsStreak}, and longest Tails streak was {experiment.longestTailsStreak}.
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-3 pt-2">
-          <button
-            type="button"
-            onClick={handleShare}
-            className="flex-1 py-3 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2"
-          >
-            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
-            <span>{copied ? 'Copied to Clipboard!' : 'Share Results'}</span>
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="py-3 px-6 rounded-xl border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
-          >
-            Close
-          </button>
+        <div className="rounded-xl border border-tails-200 bg-tails-50 p-4 dark:border-tails-900/60 dark:bg-tails-950/30">
+          <span className="block text-sm text-tails-700 dark:text-tails-300">Tails</span>
+          <span className="block text-3xl font-semibold tabular-nums text-tails-700 dark:text-tails-300">{e.tails.toLocaleString()}</span>
+          <span className="block text-sm tabular-nums text-tails-700 dark:text-tails-300">{e.tailsPercentage}%</span>
+          <span className="mt-1 block text-xs text-zinc-500 dark:text-zinc-400">{formatSignedDiff(e.tailsDiff)} from expected</span>
         </div>
       </div>
-    </div>
+
+      <div className="mt-3 flex items-center gap-6 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
+        <div className="relative h-24 w-24 shrink-0">
+          <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#6366f1" strokeWidth="12" />
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#fbbf24" strokeWidth="12" strokeDasharray={`${headsArc} ${circumference}`} />
+          </svg>
+          <span className="absolute inset-0 flex items-center justify-center text-sm font-semibold tabular-nums">
+            {compact(e.totalFlips)}
+          </span>
+        </div>
+        <dl className="space-y-2 text-sm">
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-heads-400" aria-hidden="true" />
+            <dt className="text-zinc-600 dark:text-zinc-400">Longest heads streak</dt>
+            <dd className="font-semibold tabular-nums">{e.longestHeadsStreak}</dd>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-tails-500" aria-hidden="true" />
+            <dt className="text-zinc-600 dark:text-zinc-400">Longest tails streak</dt>
+            <dd className="font-semibold tabular-nums">{e.longestTailsStreak}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <p className="sr-only">
+        {e.totalFlips} flips: {e.heads} heads ({e.headsPercentage}%), {e.tails} tails ({e.tailsPercentage}%). Longest heads
+        streak {e.longestHeadsStreak}, longest tails streak {e.longestTailsStreak}.
+      </p>
+
+      <div className="mt-6 flex gap-2">
+        <button
+          type="button"
+          onClick={handleShare}
+          className="flex h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-heads-400 px-4 text-sm font-medium text-zinc-950 transition-colors hover:bg-heads-300"
+        >
+          {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
+          {copied ? 'Copied' : 'Share'}
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="h-11 rounded-lg border border-zinc-200 px-5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
+        >
+          Close
+        </button>
+      </div>
+    </Modal>
   );
 };
