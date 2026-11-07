@@ -22,6 +22,7 @@ import {
 } from '../game/challenges';
 import { soundFx } from '../game/sound';
 import { useTheme } from '../hooks/useTheme';
+import { sendToAnalytics } from '../lib/consent';
 
 interface CoinFlipContextType {
   state: AppStorageV1;
@@ -216,6 +217,7 @@ export const CoinFlipProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const updatedChallenge = advanceDailyChallenge(currentChallenge, outcome);
       if (updatedChallenge.isCompleted && !currentChallenge.isCompleted) {
         soundFx.playAchievementFanfare();
+        sendToAnalytics('daily_challenge_completed', { challenge: updatedChallenge.challengeType });
       }
 
       // History record
@@ -242,6 +244,7 @@ export const CoinFlipProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       // Decision update if in decision mode
       let nextDecision = { ...prevData.decisionOptions };
       if (options?.isDecision) {
+        sendToAnalytics('decision_made');
         nextDecision = {
           ...nextDecision,
           lastFlipResult: outcome,
@@ -268,6 +271,7 @@ export const CoinFlipProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           setNewAchievementUnlocked(firstAch.title);
           soundFx.playAchievementFanfare();
         }
+        newlyUnlocked.forEach((id) => sendToAnalytics('achievement_unlocked', { achievement: id }));
       }
 
       // Commit state
@@ -324,8 +328,10 @@ export const CoinFlipProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           setNewAchievementUnlocked(firstAch.title);
           soundFx.playAchievementFanfare();
         }
+        newlyUnlocked.forEach((id) => sendToAnalytics('achievement_unlocked', { achievement: id }));
       }
 
+      sendToAnalytics('simulation_run', { flips: exp.totalFlips, weighted: Boolean(exp.isWeighted) });
       soundFx.playSuccessFanfare();
       return exp;
     },

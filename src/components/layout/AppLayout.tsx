@@ -3,6 +3,7 @@ import { Award, X } from 'lucide-react';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { useCoinFlipGame } from '../../context/CoinFlipContext';
+import { ConsentBanner } from '../ui/ConsentBanner';
 
 export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { screenReaderAnnouncement, newAchievementUnlocked, dismissAchievementToast } = useCoinFlipGame();
@@ -32,6 +33,7 @@ export const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children })
         {children}
       </main>
       <Footer />
+      <ConsentBanner />
 
       {newAchievementUnlocked && (
         <div

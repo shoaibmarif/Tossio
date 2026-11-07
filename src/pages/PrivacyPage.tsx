@@ -25,16 +25,18 @@ export const PrivacyPage: React.FC = () => (
         this site’s data in your browser.
       </p>
 
-      <h2>Analytics</h2>
+      <h2>Analytics and cookies</h2>
       <p>
-        We use Google Analytics and Google Tag Manager to understand, in general terms, how many people visit and which pages they
-        use. Google Analytics uses cookies and collects details like the pages you view, your approximate
-        location, and your device and browser type. We don’t use it for advertising and we don’t sell data. You
-        can block it with a content blocker or Google’s{' '}
-        <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">
-          opt-out add-on
-        </a>
-        . See{' '}
+        We use Google Analytics, loaded through Google Tag Manager, to understand in general terms how many people
+        visit, which pages they use and which features are popular (for example, “a simulation of 10,000 flips was
+        run”). Google Analytics uses cookies and collects details like the pages you view, your approximate location,
+        and your device and browser type.
+      </p>
+      <p>
+        Analytics is on by default. You can turn it off at any time by choosing <strong>Opt out</strong> in the
+        notice, or later with <strong>Cookie settings</strong> in the footer; your choice is remembered on this
+        device. When you opt out, Google Analytics only sends basic, anonymous signals without cookies. We don’t use
+        advertising cookies, build ad profiles or sell data. See{' '}
         <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
           Google’s privacy policy
         </a>{' '}

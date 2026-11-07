@@ -5,6 +5,7 @@ import { Logo } from './Logo';
 import { FOOTER_GROUPS, SITE_LINKS } from './nav';
 import { Github, Linkedin } from '../ui/BrandIcons';
 import { SITE } from '../../seo/site';
+import { openConsentSettings } from '../../lib/consent';
 
 const SOCIAL = [
   { href: SITE.repo, label: 'Tossio on GitHub', Icon: Github },
@@ -77,6 +78,11 @@ export const Footer: React.FC = () => (
             <a href={SITE.repo} target="_blank" rel="noopener" className="hover:text-zinc-900 dark:hover:text-white">
               Source code
             </a>
+          </li>
+          <li>
+            <button type="button" onClick={openConsentSettings} className="hover:text-zinc-900 dark:hover:text-white">
+              Cookie settings
+            </button>
           </li>
         </ul>
       </div>

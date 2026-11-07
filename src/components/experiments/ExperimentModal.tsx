@@ -4,6 +4,7 @@ import type { BatchExperimentRecord } from '../../types';
 import { formatSignedDiff } from '../../game/statistics';
 import { Modal } from '../ui/Modal';
 import { SITE } from '../../seo/site';
+import { sendToAnalytics } from '../../lib/consent';
 
 interface ExperimentModalProps {
   experiment: BatchExperimentRecord | null;
@@ -29,6 +30,7 @@ export const ExperimentModal: React.FC<ExperimentModalProps> = ({ experiment, on
     if (navigator.share) {
       try {
         await navigator.share({ title: `${SITE.name} simulation`, text, url });
+        sendToAnalytics('result_shared', { method: 'share' });
         return;
       } catch {
         // fall through to the clipboard
@@ -36,6 +38,7 @@ export const ExperimentModal: React.FC<ExperimentModalProps> = ({ experiment, on
     }
     try {
       await navigator.clipboard.writeText(`${text}\n${url}`);
+      sendToAnalytics('result_shared', { method: 'clipboard' });
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {

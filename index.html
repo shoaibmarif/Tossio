@@ -40,6 +40,29 @@
       })();
     </script>
 
+    <!-- Consent Mode defaults: must run before Google Tag Manager loads.
+         Analytics is on by default; visitors can opt out from the notice or
+         "Cookie settings" in the footer. Advertising storage is always off. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      (function () {
+        var optedOut = false;
+        try {
+          optedOut = localStorage.getItem('tossio.consent') === 'denied';
+        } catch (e) {}
+        gtag('consent', 'default', {
+          analytics_storage: optedOut ? 'denied' : 'granted',
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied'
+        });
+      })();
+      gtag('js', new Date());
+    </script>
+
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
@@ -55,16 +78,6 @@
     </script>
     <!-- End Google Tag Manager -->
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJV669NQYE"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'G-YJV669NQYE');
-    </script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
